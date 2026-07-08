@@ -107,7 +107,8 @@
     font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:99px}
   .card .body{padding:16px 17px 18px;display:flex;flex-direction:column;gap:4px;flex:1}
   .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem}
-  .card .desc{color:var(--ink-soft);font-size:.85rem;flex:1}
+  .card .desc{color:var(--ink-soft);font-size:.85rem}
+  .prod-desc{color:var(--ink-soft);font-size:.86rem;line-height:1.45;margin-top:6px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .card .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
   .price{font-weight:700;font-size:1.05rem}
   .price small{font-weight:500;color:var(--ink-soft);font-size:.8rem}
@@ -536,7 +537,7 @@
 
   /* ---------- produse ---------- */
   const SAMPLE = [
-    {id:'demo-cercei', names:{ro:'Cercei Rouă', ru:'Серьги «Роса»', en:'Dew earrings'}, c:'bijuterii', price:180, tag:'nou', tint:'var(--blush)', art:earrings(), image_url:null},
+    {id:'demo-cercei', names:{ro:'Cercei Rouă', ru:'Серьги «Роса»', en:'Dew earrings'}, desc:{ro:'Argint 925, lungime 3 cm.', ru:'Серебро 925, длина 3 см.', en:'925 silver, 3 cm long.'}, c:'bijuterii', price:180, tag:'nou', tint:'var(--blush)', art:earrings(), image_url:null},
     {id:'demo-inel', names:{ro:'Inel delicat', ru:'Изящное кольцо', en:'Delicate ring'}, c:'bijuterii', price:150, tag:'', tint:'var(--sage)', art:ring(), image_url:null},
     {id:'demo-colier', names:{ro:'Colier fin', ru:'Тонкое колье', en:'Fine necklace'}, c:'bijuterii', price:220, tag:'', tint:'var(--lilac)', art:necklace(), image_url:null},
     {id:'demo-agrafa', names:{ro:'Agrafă floare', ru:'Заколка-цветок', en:'Flower hair clip'}, c:'par', price:90, tag:'popular', tint:'var(--butter)', art:clip(), image_url:null},
@@ -591,7 +592,7 @@
         + '<div class="thumb" style="background:'+(p.tint||'var(--blush)')+'">'
         + (tagLabel ? '<span class="tag">'+tagLabel+'</span>' : '')
         + media(p) + '</div>'
-        + '<div class="body"><h3>'+name+'</h3><span class="desc">'+catLabel+'</span>'
+        + '<div class="body"><h3>'+name+'</h3><span class="desc">'+catLabel+'</span>'+ (p.desc && p.desc[lang] ? '<p class="prod-desc">'+p.desc[lang]+'</p>' : '')
         + '<div class="row"><span class="price">'+p.price+' <small>lei</small></span>'
         + '<button class="add" onclick="add(\''+p.id+'\')" aria-label="+">+</button></div></div></article>';
     }).join('');
@@ -759,6 +760,7 @@
         PRODUCTS = rows.map(x => ({
           id:String(x.id),
           names:{ ro:x.nume_ro||'', ru:x.nume_ru||x.nume_ro||'', en:x.nume_en||x.nume_ro||'' },
+          desc:{ ro:x.desc_ro||'', ru:x.desc_ru||x.desc_ro||'', en:x.desc_en||x.desc_ro||'' },
           c:x.categorie||'bijuterii', price:x.pret||0, tag:x.tag||'',
           image_url:x.image_url||null, art:null, tint:'var(--blush)'
         }));
