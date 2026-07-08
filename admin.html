@@ -1,775 +1,296 @@
 <!DOCTYPE html>
-<html lang="ro" data-theme="light">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canapix — accesorii & mici cadouri</title>
+<title>Canapix — Админка</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#FBF4F2; --surface:#FFFDFB;
-    --blush:#F4D9D6; --blush-deep:#EBC4BF;
-    --sage:#C3D5BD; --sage-deep:#7E9A76;
-    --lilac:#DED2EA; --lilac-deep:#B7A2CC;
-    --butter:#F6E9C7;
-    --ink:#4A3F46; --ink-soft:#8A7F86;
-    --plum:#9B7BA3; --plum-deep:#836691;
-    --line:#EFE2E0; --radius:18px;
-    --shadow:0 12px 30px -18px rgba(120,90,110,.35);
-  }
-  [data-theme="dark"]{
-    --bg:#1d1922; --surface:#282230;
-    --ink:#ECE7EF; --ink-soft:#A99FB2;
-    --line:#37303F;
-    --plum:#B98CC6; --plum-deep:#CBAAD6;
-    --sage-deep:#A3C199; --blush-deep:#5C4550;
-    --shadow:0 14px 34px -18px rgba(0,0,0,.6);
-  }
+  :root{ --bg:#FBF4F2; --surface:#FFFDFB; --blush:#F4D9D6; --sage:#C3D5BD; --lilac:#DED2EA;
+    --ink:#4A3F46; --ink-soft:#8A7F86; --plum:#9B7BA3; --plum-deep:#836691; --line:#EFE2E0;
+    --shadow:0 12px 30px -18px rgba(120,90,110,.35); }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:'Karla',system-ui,sans-serif;background:var(--bg);color:var(--ink);
-    line-height:1.55;overflow-x:hidden;transition:background .3s,color .3s}
-  .blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
-  [data-theme="dark"] .blob{opacity:.22}
-  .blob.b1{width:340px;height:340px;background:var(--blush);top:-80px;right:-60px}
-  .blob.b2{width:300px;height:300px;background:var(--sage);top:40%;left:-120px}
-  .blob.b3{width:280px;height:280px;background:var(--lilac);bottom:-60px;right:10%}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+  body{font-family:'Karla',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;overflow-x:hidden}
+  .blob{position:fixed;border-radius:50%;filter:blur(65px);opacity:.5;z-index:0;pointer-events:none}
+  .blob.b1{width:320px;height:320px;background:var(--blush);top:-70px;right:-50px}
+  .blob.b2{width:300px;height:300px;background:var(--sage);bottom:-80px;left:-90px}
+  .blob.b3{width:260px;height:260px;background:var(--lilac);top:45%;right:12%}
+  .wrap{max-width:840px;margin:0 auto;padding:26px 22px;position:relative;z-index:1}
 
-  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
-    background:color-mix(in srgb, var(--bg) 78%, transparent);border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:12px}
-  .logo{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;letter-spacing:-.01em;
-    display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;flex-shrink:0}
-  .logo .dot{width:11px;height:11px;border-radius:50%;background:var(--plum);display:inline-block}
-  .nav-links{display:flex;gap:24px;list-style:none;margin-left:12px}
-  .nav-links a{color:var(--ink-soft);text-decoration:none;font-weight:500;font-size:.93rem;transition:color .2s}
-  .nav-links a:hover{color:var(--plum-deep)}
-  .controls{display:flex;gap:8px;align-items:center;margin-left:auto}
-  .lang{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:2px}
-  .lang button{border:none;background:none;padding:5px 8px;border-radius:99px;cursor:pointer;
-    font-family:'Karla';font-weight:700;font-size:.75rem;color:var(--ink-soft);line-height:1}
-  .lang button.active{background:var(--ink);color:var(--surface)}
-  .theme-btn{background:var(--surface);border:1px solid var(--line);width:34px;height:34px;border-radius:50%;
-    cursor:pointer;font-size:1rem;color:var(--ink);display:grid;place-items:center}
-  .acct-btn{background:transparent;border:1.5px solid var(--blush-deep);color:var(--ink);
-    padding:8px 15px;border-radius:99px;cursor:pointer;font-weight:600;font-size:.88rem;font-family:'Karla';transition:background .18s}
-  .acct-btn:hover{background:var(--blush)}
-  .cart{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);
-    padding:7px 13px;border-radius:99px;cursor:pointer;font-weight:600;color:var(--ink);box-shadow:var(--shadow)}
-  .cart svg{stroke:var(--ink)}
-  .cart .count{background:var(--plum);color:#fff;border-radius:99px;min-width:20px;height:20px;
-    display:grid;place-items:center;font-size:.75rem;padding:0 5px}
+  /* ---------- LOGIN (centered) ---------- */
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;position:relative;z-index:1}
+  .login-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:38px 32px 30px;
+    width:100%;max-width:380px;box-shadow:0 34px 70px -26px rgba(120,90,110,.45)}
+  .brand{font-family:'Fraunces',serif;font-weight:600;font-size:1.9rem;display:flex;align-items:center;gap:11px;justify-content:center}
+  .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--plum)}
+  .brand-sub{text-align:center;color:var(--ink-soft);font-size:.93rem;margin:7px 0 24px}
+  .login-card label{display:block;font-size:.82rem;font-weight:600;margin:12px 0 5px}
+  .login-card input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;
+    font-family:'Karla';font-size:.98rem;color:var(--ink);background:var(--bg)}
+  .login-card input:focus{outline:none;border-color:var(--plum)}
+  .login-card .btn{width:100%;margin-top:20px}
+  .back-link{display:block;text-align:center;margin-top:16px;color:var(--ink-soft);text-decoration:none;font-size:.88rem}
+  .back-link:hover{color:var(--plum-deep)}
 
-  .hero{padding:74px 0 50px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--sage-deep);margin-bottom:18px}
-  .eyebrow::before{content:"";width:26px;height:1.5px;background:var(--sage-deep)}
-  .hero h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(2.4rem,5vw,3.7rem);
-    line-height:1.05;letter-spacing:-.02em;margin-bottom:20px}
-  .hero h1 em{font-style:italic;color:var(--plum-deep)}
-  .hero p{color:var(--ink-soft);font-size:1.08rem;max-width:40ch;margin-bottom:30px}
-  .btn{font-family:'Karla';font-weight:600;font-size:1rem;border:none;cursor:pointer;
-    padding:14px 26px;border-radius:99px;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .2s}
-  .btn-primary{background:var(--plum);color:#fff;box-shadow:0 10px 24px -10px rgba(155,123,163,.7)}
-  .btn-primary:hover{transform:translateY(-2px)}
-  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--blush-deep);margin-left:10px}
-  .btn-ghost:hover{background:var(--blush)}
-  .hero-art{position:relative;aspect-ratio:1;display:grid;place-items:center}
-  .hero-card{position:absolute;background:var(--surface);border-radius:22px;box-shadow:var(--shadow);
-    padding:22px;display:grid;place-items:center}
-  .hero-card svg{width:100%;height:100%}
-  .hc1{width:56%;aspect-ratio:.85;top:4%;left:4%;background:var(--blush);z-index:2;transform:rotate(-6deg)}
-  .hc2{width:52%;aspect-ratio:.85;bottom:6%;right:2%;background:var(--sage);z-index:3;transform:rotate(5deg)}
-  .hc3{width:44%;aspect-ratio:.85;bottom:0;left:16%;background:var(--lilac);z-index:1;transform:rotate(-2deg)}
-
-  .cats{display:flex;flex-wrap:wrap;gap:11px;padding:6px 0 40px}
-  .chip{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:9px 18px;
-    font-weight:600;font-size:.9rem;color:var(--ink-soft);cursor:pointer;transition:all .18s}
-  .chip:hover{border-color:var(--plum);color:var(--plum-deep)}
-  .chip.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-
-  .sec-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:10px}
-  .sec-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.7rem,3.5vw,2.3rem);letter-spacing:-.02em}
-  .sec-head span{color:var(--ink-soft);font-size:.95rem}
-
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding-bottom:70px}
-  .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);
-    display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
-  .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-  .card .thumb{aspect-ratio:1;display:grid;place-items:center;position:relative}
-  .card .thumb svg{width:58%;height:58%}
-  .thumb-img{width:100%;height:100%;object-fit:cover}
-  .ci-thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-  .tag{position:absolute;top:12px;left:12px;background:rgba(255,253,251,.92);color:var(--plum-deep);
-    font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:99px}
-  .card .body{padding:16px 17px 18px;display:flex;flex-direction:column;gap:4px;flex:1}
-  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem}
-  .card .desc{color:var(--ink-soft);font-size:.85rem}
-  .prod-desc{color:var(--ink-soft);font-size:.86rem;line-height:1.45;margin-top:6px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .card .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
-  .price{font-weight:700;font-size:1.05rem}
-  .price small{font-weight:500;color:var(--ink-soft);font-size:.8rem}
-  .add{background:var(--ink);color:var(--surface);border:none;width:38px;height:38px;border-radius:11px;
-    cursor:pointer;font-size:1.3rem;line-height:1;display:grid;place-items:center;transition:background .18s,transform .1s}
-  .add:hover{background:var(--plum)}
-  .add:active{transform:scale(.9)}
-
-  .promise{background:var(--surface);border:1px solid var(--line);border-radius:24px;
-    padding:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:70px}
-  .promise .item{display:flex;flex-direction:column;gap:6px}
-  .promise .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;margin-bottom:4px}
-  .promise h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem}
-  .promise p{color:var(--ink-soft);font-size:.9rem}
-
-  footer{border-top:1px solid var(--line);padding:44px 0 34px}
-  .foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
-  .foot .logo{margin-bottom:12px}
-  .foot p{color:var(--ink-soft);font-size:.9rem;max-width:34ch}
-  .foot-cols{display:flex;gap:60px;flex-wrap:wrap}
-  .foot-col h5{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:12px;font-weight:700}
-  .foot-col a{display:block;color:var(--ink-soft);text-decoration:none;font-size:.92rem;margin-bottom:8px;transition:color .18s}
-  .foot-col a:hover{color:var(--plum-deep)}
-  .copy{margin-top:34px;color:var(--ink-soft);font-size:.82rem;text-align:center}
-
-  .overlay{position:fixed;inset:0;background:rgba(30,25,34,.5);backdrop-filter:blur(4px);
-    z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
-  .overlay.open{display:flex}
-  .modal{background:var(--surface);border-radius:24px;max-width:440px;width:100%;padding:30px 28px 26px;
-    box-shadow:0 30px 60px -20px rgba(30,20,30,.5);max-height:92vh;overflow-y:auto;position:relative}
-  .modal h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.7rem;margin-bottom:4px}
-  .modal .sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:22px}
-  .order-sum{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 15px;
-    margin-bottom:20px;font-weight:600;font-size:.92rem;color:var(--ink);display:flex;justify-content:space-between}
-  .order-sum b{color:var(--plum-deep);font-weight:700}
-  .method{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-  .m-opt{padding:11px 10px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);cursor:pointer;
-    font-family:'Karla';font-weight:600;font-size:.85rem;color:var(--ink-soft);transition:all .18s;line-height:1.2}
-  .m-opt.active{border-color:var(--plum);background:color-mix(in srgb,var(--plum) 12%,var(--surface));color:var(--plum-deep)}
-  .pickup-note{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 14px;
-    font-size:.86rem;margin-bottom:16px;line-height:1.5;color:var(--ink-soft)}
-  .modal .close{position:absolute;top:18px;right:18px;background:var(--bg);border:none;width:34px;height:34px;
-    border-radius:50%;cursor:pointer;font-size:1.3rem;color:var(--ink-soft);display:grid;place-items:center;line-height:1}
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:5px}
-  .field input{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;
-    font-family:'Karla';font-size:.95rem;color:var(--ink);background:var(--bg);transition:border .18s}
-  .field input:focus{outline:none;border-color:var(--plum)}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .submit-btn{width:100%;background:var(--plum);color:#fff;border:none;padding:14px;border-radius:99px;
-    font-family:'Karla';font-weight:700;font-size:1rem;cursor:pointer;margin-top:6px;
-    box-shadow:0 10px 24px -10px rgba(155,123,163,.7);transition:transform .15s}
-  .submit-btn:hover{transform:translateY(-2px)}
-  .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-  .form-msg{font-size:.88rem;margin-top:12px;text-align:center;min-height:20px}
-  .form-msg.ok{color:var(--sage-deep)}
-  .form-msg.err{color:#d98a8a}
-
-  .cart-overlay{position:fixed;inset:0;background:rgba(30,25,34,.5);backdrop-filter:blur(4px);
-    z-index:70;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
-  .cart-overlay.open{opacity:1;visibility:visible}
-  .cart-drawer{position:absolute;top:0;right:0;height:100%;width:390px;max-width:90vw;background:var(--surface);
-    box-shadow:-20px 0 50px -20px rgba(30,20,30,.5);display:flex;flex-direction:column;
-    transform:translateX(100%);transition:transform .3s ease}
-  .cart-overlay.open .cart-drawer{transform:translateX(0)}
-  .cart-head{display:flex;align-items:center;justify-content:space-between;padding:22px 22px 16px;border-bottom:1px solid var(--line)}
-  .cart-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.5rem}
-  .dclose{background:var(--bg);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;
-    font-size:1.3rem;color:var(--ink-soft);display:grid;place-items:center;line-height:1}
-  .cart-body{flex:1;overflow-y:auto;padding:8px 18px}
-  .cart-empty{text-align:center;color:var(--ink-soft);padding:60px 20px;font-size:1.05rem;line-height:1.7}
-  .cart-empty span{font-size:.88rem;opacity:.8}
-  .cart-item{display:grid;grid-template-columns:50px 1fr auto auto;gap:12px;align-items:center;
-    padding:13px 0;border-bottom:1px solid var(--line)}
-  .ci-thumb{width:50px;height:50px;border-radius:12px;display:grid;place-items:center}
-  .ci-thumb svg{width:60%;height:60%}
-  .ci-info{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .ci-name{font-family:'Fraunces',serif;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ci-price{color:var(--ink-soft);font-size:.84rem}
-  .ci-qty{display:flex;align-items:center;gap:8px}
-  .ci-qty button{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:var(--bg);
-    cursor:pointer;font-size:1rem;line-height:1;color:var(--ink);display:grid;place-items:center}
-  .ci-qty button:hover{border-color:var(--plum);color:var(--plum-deep)}
-  .ci-qty span{min-width:16px;text-align:center;font-weight:600;font-size:.9rem}
-  .ci-remove{background:none;border:none;color:var(--ink-soft);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 2px}
-  .ci-remove:hover{color:#d98a8a}
-  .cart-foot{padding:18px 22px 22px;border-top:1px solid var(--line)}
-  .total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-  .total-row .lbl{color:var(--ink-soft);font-size:.98rem}
-  .total-row .amt{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600}
-  .checkout-btn{width:100%;background:var(--plum);color:#fff;border:none;padding:14px;border-radius:99px;
-    font-family:'Karla';font-weight:700;font-size:1rem;cursor:pointer;
-    box-shadow:0 10px 24px -10px rgba(155,123,163,.7);transition:transform .15s}
-  .checkout-btn:hover{transform:translateY(-2px)}
-
-  /* ---------- checkout page ---------- */
-  .checkout{position:fixed;inset:0;background:var(--bg);z-index:90;overflow-y:auto;display:none}
-  .checkout.open{display:block}
-  .co-wrap{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
-  .co-back{background:none;border:none;color:var(--ink-soft);font-family:'Karla';font-weight:600;cursor:pointer;font-size:.92rem;padding:6px 0;margin-bottom:6px}
-  .co-back:hover{color:var(--plum-deep)}
-  .steps{display:flex;align-items:center;justify-content:center;margin:8px 0 26px}
-  .step{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surface);
-    border:1px solid var(--line);color:var(--ink-soft);font-weight:700;font-family:'Fraunces',serif;flex-shrink:0}
-  .step.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-  .step.done{background:var(--sage-deep);color:#fff;border-color:var(--sage-deep)}
-  .step-line{width:90px;max-width:15vw;height:1.5px;background:var(--line)}
-  .co-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start}
-  .co-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
-  .co-card h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.5rem;margin-bottom:14px}
-  .co-card h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem;margin-bottom:12px}
-  .co-item{display:grid;grid-template-columns:60px 1fr auto auto auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
-  .co-item .th{width:60px;height:60px;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:var(--blush)}
-  .co-item .th img{width:100%;height:100%;object-fit:cover}
-  .co-item .th svg{width:60%;height:60%}
-  .co-nm{font-family:'Fraunces',serif;font-size:1.02rem}
-  .co-price{color:var(--ink-soft);font-size:.85rem}
-  .co-qty{display:flex;align-items:center;gap:7px}
-  .co-qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;color:var(--ink);font-size:1rem}
-  .co-line{font-weight:700;color:var(--plum-deep);min-width:76px;text-align:right;font-size:.95rem}
-  .co-del{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:1.05rem}
-  .co-del:hover{color:#c67b7b}
-  .radio{display:flex;gap:9px;align-items:center;padding:8px 0;cursor:pointer;font-size:.95rem}
-  .radio input{width:auto;margin:0;accent-color:var(--plum);flex-shrink:0}
-  .co-panel label{display:block;font-size:.82rem;font-weight:600;margin:12px 0 5px}
-  .co-panel select,.co-panel input:not([type=radio]),.co-panel textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);
-    border-radius:11px;font-family:'Karla';font-size:.95rem;color:var(--ink);background:var(--bg)}
-  .co-panel select:focus,.co-panel input:focus,.co-panel textarea:focus{outline:none;border-color:var(--plum)}
-  .co-panel textarea{resize:vertical}
-  .co-panel .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .sumrow{display:flex;justify-content:space-between;margin-top:18px;color:var(--ink-soft);font-size:.95rem}
-  .promo-link{display:inline-block;margin-top:10px;color:var(--plum-deep);font-size:.9rem;text-decoration:underline;cursor:pointer}
-  .totalrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;padding-top:14px;
-    border-top:1px solid var(--line);font-weight:700;font-size:1.12rem;letter-spacing:.02em}
-  .co-success{text-align:center;padding:26px 8px}
-  .co-success .check{width:62px;height:62px;border-radius:50%;background:var(--sage);color:var(--sage-deep);
-    display:grid;place-items:center;font-size:1.9rem;margin:0 auto 14px}
-  .btn-ghost2{background:transparent;border:1.5px solid var(--line);color:var(--ink);padding:13px;border-radius:99px;
-    font-family:'Karla';font-weight:700;cursor:pointer;width:100%;margin-bottom:10px}
-  @media(max-width:820px){ .co-grid{grid-template-columns:1fr} .step-line{width:44px} }
-
-  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--ink);color:var(--surface);padding:13px 22px;border-radius:99px;font-weight:600;
-    font-size:.92rem;opacity:0;pointer-events:none;transition:all .3s;z-index:80}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-  @media(max-width:900px){ .nav-links{display:none} }
-  @media(max-width:860px){
-    .hero{grid-template-columns:1fr;gap:20px}
-    .hero-art{max-width:360px;margin:0 auto;width:100%}
-    .grid{grid-template-columns:repeat(2,1fr)}
-    .promise{grid-template-columns:1fr}
-  }
-  @media(max-width:560px){ .acct-btn{display:none} }
-  @media(max-width:480px){ .grid{grid-template-columns:1fr 1fr;gap:14px} .card .body{padding:13px} }
-  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+  /* ---------- PANEL ---------- */
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px}
+  .panel-head h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.6rem;display:flex;align-items:center;gap:9px}
+  .panel-head .dot{width:11px;height:11px;border-radius:50%;background:var(--plum)}
+  .head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+  label{display:block;font-size:.82rem;font-weight:600;margin:12px 0 5px}
+  input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;
+    font-family:'Karla';font-size:.95rem;color:var(--ink);background:var(--bg);font-family:'Karla'}
+  textarea{resize:vertical;min-height:80px}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--plum)}
+  .edit{background:none;border:1px solid var(--line);color:var(--ink-soft);border-radius:9px;padding:7px 12px;cursor:pointer;font-weight:600;margin-right:6px}
+  .edit:hover{border-color:var(--plum);color:var(--plum-deep)}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .btn{background:var(--plum);color:#fff;border:none;padding:12px 22px;border-radius:99px;font-family:'Karla';
+    font-weight:700;font-size:.95rem;cursor:pointer;transition:transform .15s;text-decoration:none;display:inline-block;text-align:center}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.6;transform:none;cursor:not-allowed}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .msg{font-size:.88rem;margin-top:10px;min-height:18px}
+  .msg.ok{color:#5a8a52} .msg.err{color:#c67b7b}
+  .hidden{display:none}
+  .preview{width:90px;height:90px;border-radius:12px;object-fit:cover;border:1px solid var(--line);margin-top:8px;display:none}
+  .list-item{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+  .list-item img{width:56px;height:56px;border-radius:12px;object-fit:cover;background:var(--blush)}
+  .li-name{font-family:'Fraunces',serif;font-size:1.05rem}
+  .li-meta{color:var(--ink-soft);font-size:.85rem}
+  .del{background:none;border:1px solid var(--line);color:var(--ink-soft);border-radius:9px;padding:7px 12px;cursor:pointer;font-weight:600}
+  .del:hover{border-color:#c67b7b;color:#c67b7b}
+  .muted{color:var(--ink-soft);font-size:.9rem}
+  .section-title{font-family:'Fraunces',serif;font-weight:500;font-size:1.3rem;margin:28px 0 10px}
+  @media(max-width:560px){ .row3{grid-template-columns:1fr} }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 
-<header>
-  <div class="wrap nav">
-    <a href="#" class="logo"><span class="dot"></span>Canapix</a>
-    <ul class="nav-links">
-      <li><a href="#shop" data-i18n="nav_shop">Magazin</a></li>
-      <li><a href="#promise" data-i18n="nav_why">De ce Canapix</a></li>
-      <li><a href="#" data-i18n="nav_gifts">Cadouri</a></li>
-      <li><a href="#" data-i18n="nav_contact">Contact</a></li>
-    </ul>
-    <div class="controls">
-      <div class="lang" role="group" aria-label="Language">
-        <button data-lang="ro" class="active" onclick="setLang('ro')">RO</button>
-        <button data-lang="ru" onclick="setLang('ru')">RU</button>
-        <button data-lang="en" onclick="setLang('en')">EN</button>
-      </div>
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Theme">☾</button>
-      <button class="cart" onclick="openCart()" aria-label="Cart">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span class="count" id="count">0</span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <span class="eyebrow" data-i18n="hero_eyebrow">Accesorii & mici cadouri</span>
-      <h1 data-i18n-html="hero_title">Detalii mici care <em>schimbă</em> toată ziua.</h1>
-      <p data-i18n="hero_p">Cercei, agrafe, brățări și cadouri împachetate cu grijă — alese pe îndelete, gata de dăruit.</p>
-      <a href="#shop" class="btn btn-primary" data-i18n="hero_cta1">Descoperă colecția</a>
-      <a href="#" class="btn btn-ghost" data-i18n="hero_cta2">Cadouri sub 200 lei</a>
-    </div>
-    <div class="hero-art">
-      <div class="hero-card hc1"><svg viewBox="0 0 100 100" fill="none" stroke="#836691" stroke-width="3"><circle cx="35" cy="28" r="7"/><path d="M35 35 L35 52"/><circle cx="35" cy="60" r="9" fill="#9B7BA3" stroke="none"/><circle cx="65" cy="28" r="7"/><path d="M65 35 L65 52"/><circle cx="65" cy="60" r="9" fill="#9B7BA3" stroke="none"/></svg></div>
-      <div class="hero-card hc2"><svg viewBox="0 0 100 100" fill="none"><g stroke="#4A3F46" stroke-width="3"><circle cx="50" cy="42" r="10" fill="#F4D9D6"/><ellipse cx="50" cy="24" rx="8" ry="12" fill="#FFFDFB"/><ellipse cx="67" cy="42" rx="12" ry="8" fill="#FFFDFB"/><ellipse cx="33" cy="42" rx="12" ry="8" fill="#FFFDFB"/><ellipse cx="50" cy="60" rx="8" ry="12" fill="#FFFDFB"/><path d="M50 70 L50 90"/></g></svg></div>
-      <div class="hero-card hc3"><svg viewBox="0 0 100 100" fill="none" stroke="#7E9A76" stroke-width="4"><circle cx="50" cy="58" r="24"/><path d="M40 30 L50 44 L60 30 Z" fill="#B7A2CC" stroke="#836691" stroke-width="2.5"/></svg></div>
-    </div>
-  </section>
-
-  <section id="shop" class="cats">
-    <div class="chip active" data-i18n="chip_all" onclick="filter(this,'all')">Toate</div>
-    <div class="chip" data-i18n="cat_bijuterii" onclick="filter(this,'bijuterii')">Bijuterii</div>
-    <div class="chip" data-i18n="cat_par" onclick="filter(this,'par')">Accesorii de păr</div>
-    <div class="chip" data-i18n="cat_genti" onclick="filter(this,'genti')">Genți & pungi</div>
-    <div class="chip" data-i18n="cat_cadou" onclick="filter(this,'cadou')">Cadouri gata</div>
-  </section>
-
-  <div class="sec-head">
-    <h2 data-i18n="sec_head">Alese cu drag</h2>
-    <span id="shown">8 produse</span>
-  </div>
-
-  <section class="grid" id="grid"></section>
-
-  <section id="promise" class="promise">
-    <div class="item">
-      <div class="ic" style="background:var(--blush)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#836691" stroke-width="2.2"><path d="M12 2 3 6v6c0 5 4 8 9 10 5-2 9-5 9-10V6l-9-4Z"/></svg></div>
-      <h4 data-i18n="promise1_t">Împachetat cu grijă</h4>
-      <p data-i18n="promise1_d">Fiecare comandă vine gata de dăruit — hârtie, panglică și un bilețel de la tine.</p>
-    </div>
-    <div class="item">
-      <div class="ic" style="background:var(--sage)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A3F46" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <h4 data-i18n="promise2_t">Livrare în Chișinău</h4>
-      <p data-i18n="promise2_d">Comanzi azi, ajunge mâine. În oraș, livrare gratuită de la 300 lei.</p>
-    </div>
-    <div class="item">
-      <div class="ic" style="background:var(--lilac)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#836691" stroke-width="2.2"><path d="M12 3v18M5 10l7-7 7 7"/></svg></div>
-      <h4 data-i18n="promise3_t">Piese în ediție mică</h4>
-      <p data-i18n="promise3_d">Aducem cantități mici, așa că rareori o să vezi pe altcineva cu aceeași piesă.</p>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap foot">
-    <div>
-      <a href="#" class="logo"><span class="dot"></span>Canapix</a>
-      <p data-i18n="foot_tagline">Accesorii mici și cadouri împachetate cu grijă, din Chișinău.</p>
-    </div>
-    <div class="foot-cols">
-      <div class="foot-col">
-        <h5 data-i18n="foot_shop">Magazin</h5>
-        <a href="#" data-i18n="cat_bijuterii">Bijuterii</a>
-        <a href="#" data-i18n="cat_par">Accesorii de păr</a>
-        <a href="#" data-i18n="cat_genti">Genți & pungi</a>
-        <a href="#" data-i18n="cat_cadou">Cadouri gata</a>
-      </div>
-      <div class="foot-col">
-        <h5 data-i18n="foot_help">Ajutor</h5>
-        <a href="#" data-i18n="foot_delivery">Livrare</a>
-        <a href="#" data-i18n="foot_returns">Retur</a>
-        <a href="#" data-i18n="foot_contact">Contact</a>
-      </div>
-      <div class="foot-col">
-        <h5 data-i18n="foot_write">Scrie-ne</h5>
-        <a href="#">Instagram</a><a href="#">Telegram</a><a href="#">+373 60 000 000</a>
-      </div>
-    </div>
-  </div>
-  <p class="copy">© 2026 Canapix · Chișinău, Moldova · <a href="admin.html" style="color:var(--ink-soft);text-decoration:none">Admin</a></p>
-</footer>
-
-<!-- CHECKOUT PAGE -->
-<div class="checkout" id="checkoutView">
-  <div class="co-wrap">
-    <button class="co-back" onclick="closeCheckout()" data-i18n="co_back">← înapoi la magazin</button>
-    <div class="steps">
-      <div class="step active" id="st1">1</div><div class="step-line"></div>
-      <div class="step" id="st2">2</div><div class="step-line"></div>
-      <div class="step" id="st3">3</div>
-    </div>
-    <div class="co-grid">
-      <div class="co-card">
-        <h2 data-i18n="co_cart">Coșul de cumpărături</h2>
-        <div id="coItems"></div>
-      </div>
-      <div class="co-card co-panel">
-        <div id="coStep1">
-          <h3 data-i18n="co_method">Metoda de livrare</h3>
-          <label class="radio"><input type="radio" name="dm" value="livrare" checked onclick="setDelivery('livrare')"><span data-i18n="opt_courier">Livrare prin curier</span></label>
-          <label class="radio"><input type="radio" name="dm" value="ridicare" onclick="setDelivery('ridicare')"><span data-i18n="opt_pickup">Ridicare personală</span></label>
-          <div id="coDelivery">
-            <label data-i18n="co_city">Orașul livrării</label>
-            <select id="co-oras">
-              <option value="" data-i18n="co_city_ph">Alege orașul</option>
-              <option>Chișinău</option><option>Bălți</option><option>Cahul</option><option>Ungheni</option>
-              <option>Orhei</option><option>Soroca</option><option>Comrat</option><option>Strășeni</option>
-              <option>Ialoveni</option><option>Căușeni</option><option>Edineț</option><option>Alt oraș</option>
-            </select>
-            <div class="two">
-              <div><label data-i18n="co_date">Data</label><input id="co-data" type="date"></div>
-              <div><label data-i18n="co_time">Ora</label>
-                <select id="co-ora">
-                  <option value="operator" data-i18n="time_op">Stabiliți cu operatorul</option>
-                  <option>09:00–12:00</option><option>12:00–15:00</option><option>15:00–18:00</option><option>18:00–21:00</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <label data-i18n="co_msg">Mesaj pe felicitare</label>
-          <textarea id="co-mesaj" rows="3" data-i18n-ph="co_msg_ph" placeholder="Câteva cuvinte care vor fi printate pe felicitare"></textarea>
-          <div class="sumrow"><span data-i18n="co_subtotal">Subtotal</span><span id="coSubtotal">0 lei</span></div>
-          <a class="promo-link" onclick="togglePromo()" data-i18n="co_promo">Ai un cod promoțional?</a>
-          <div id="promoBox" style="display:none;margin-top:8px"><input id="co-promo" placeholder="COD"></div>
-          <div class="totalrow"><span data-i18n="co_total">TOTAL</span><span id="coTotal">0 lei</span></div>
-          <button class="checkout-btn" onclick="goStep2()" data-i18n="co_continue">Continuă</button>
-        </div>
-        <div id="coStep2" style="display:none">
-          <h3 data-i18n="co_contact">Datele tale</h3>
-          <div class="two">
-            <div><label data-i18n="l_prenume">Prenume</label><input id="co-prenume" placeholder="Maria"></div>
-            <div><label data-i18n="l_nume">Nume</label><input id="co-nume" placeholder="Popescu"></div>
-          </div>
-          <label data-i18n="l_email">Email</label><input id="co-email" type="email" placeholder="maria@exemplu.md">
-          <label data-i18n="l_telefon">Telefon</label><input id="co-telefon" type="tel" placeholder="+373 6X XXX XXX">
-          <div id="coAddr">
-            <label data-i18n="l_adresa">Adresă (stradă, nr.)</label><input id="co-adresa" placeholder="str. ...">
-            <label data-i18n="l_cod">Cod poștal</label><input id="co-cod" placeholder="MD-2001">
-          </div>
-          <div class="totalrow"><span data-i18n="co_total">TOTAL</span><span id="coTotal2">0 lei</span></div>
-          <button class="btn-ghost2" onclick="goStep1()" data-i18n="co_back_btn">Înapoi</button>
-          <button class="checkout-btn" id="coFinal" onclick="submitOrder()" data-i18n="form_submit">Trimite comanda</button>
-          <p class="form-msg" id="coMsg"></p>
-        </div>
-        <div id="coStep3" style="display:none" class="co-success">
-          <div class="check">✓</div>
-          <h3 data-i18n="co_done_t">Comandă trimisă!</h3>
-          <p style="color:var(--ink-soft)" data-i18n="co_done_p">Îți mulțumim! Te contactăm în curând pentru confirmare.</p>
-          <button class="checkout-btn" style="margin-top:18px" onclick="closeCheckout()" data-i18n="co_back_shop">Înapoi la magazin</button>
-        </div>
-      </div>
-    </div>
+<!-- LOGIN -->
+<div id="loginView" class="login-screen">
+  <div class="login-card">
+    <div class="brand"><span class="dot"></span>Canapix</div>
+    <p class="brand-sub">Панель администратора</p>
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="admin@canapix.md" autocomplete="username">
+    <label for="password">Пароль</label>
+    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="btn" id="loginBtn" onclick="login()">Войти</button>
+    <p class="msg" id="loginMsg"></p>
+    <a class="back-link" href="index.html">← Вернуться на сайт</a>
   </div>
 </div>
 
-<div class="cart-overlay" id="cartOverlay">
-  <div class="cart-drawer" role="dialog" aria-modal="true" aria-label="Cart">
-    <div class="cart-head">
-      <h2 data-i18n="cart_title">Coșul tău</h2>
-      <button class="dclose" onclick="closeCart()" aria-label="Close">×</button>
-    </div>
-    <div class="cart-body" id="cartBody"></div>
-    <div class="cart-foot" id="cartFoot" style="display:none">
-      <div class="total-row"><span class="lbl" data-i18n="cart_total">Total</span><span class="amt" id="cartTotal">0 lei</span></div>
-      <button class="checkout-btn" data-i18n="cart_checkout" onclick="checkout()">Finalizează comanda</button>
+<!-- PANEL -->
+<div id="panelView" class="wrap hidden">
+  <div class="panel-head">
+    <h1><span class="dot"></span>Canapix · Товары</h1>
+    <div class="head-actions">
+      <span class="muted">Вы вошли как <b id="who"></b></span>
+      <a class="btn btn-ghost" href="index.html">На сайт</a>
+      <button class="btn btn-ghost" onclick="logout()">Выйти</button>
     </div>
   </div>
-</div>
 
-<div class="toast" id="toast"></div>
+  <div class="card">
+    <div class="section-title" style="margin-top:0">Добавить товар</div>
+    <div class="row3">
+      <div><label for="p-ro">Название (RO)</label><input id="p-ro" placeholder="Cercei aurii"></div>
+      <div><label for="p-ru">Название (RU)</label><input id="p-ru" placeholder="Золотые серьги"></div>
+      <div><label for="p-en">Название (EN)</label><input id="p-en" placeholder="Gold earrings"></div>
+    </div>
+    <div class="row3">
+      <div>
+        <label for="p-cat">Категория</label>
+        <select id="p-cat">
+          <option value="bijuterii">Украшения</option>
+          <option value="par">Аксессуары для волос</option>
+          <option value="genti">Сумки и пакеты</option>
+          <option value="cadou">Готовые подарки</option>
+        </select>
+      </div>
+      <div><label for="p-price">Цена (лей)</label><input id="p-price" type="number" min="0" placeholder="180"></div>
+      <div>
+        <label for="p-tag">Метка</label>
+        <select id="p-tag">
+          <option value="">— нет —</option>
+          <option value="nou">Новинка</option>
+          <option value="popular">Хит</option>
+        </select>
+      </div>
+    </div>
+    <label for="p-photo">Фото товара</label>
+    <input id="p-photo" type="file" accept="image/*" onchange="previewPhoto()">
+    <img id="preview" class="preview" alt="">
+    <div style="margin-top:16px"><button class="btn" id="addBtn" onclick="addProduct()">Добавить товар</button></div>
+    <p class="msg" id="addMsg"></p>
+  </div>
+
+  <div class="section-title">Товары на сайте (<span id="cnt">0</span>)</div>
+  <div class="card">
+    <div id="list"><p class="muted">Загрузка…</p></div>
+  </div>
+</div>
 
 <script>
-  /* ---------- traduceri ---------- */
-  const T = {
-    ro:{ nav_shop:'Magazin', nav_why:'De ce Canapix', nav_gifts:'Cadouri', nav_contact:'Contact', account:'Cont',
-      hero_eyebrow:'Accesorii & mici cadouri', hero_title:'Detalii mici care <em>schimbă</em> toată ziua.',
-      hero_p:'Cercei, agrafe, brățări și cadouri împachetate cu grijă — alese pe îndelete, gata de dăruit.',
-      hero_cta1:'Descoperă colecția', hero_cta2:'Cadouri sub 200 lei', chip_all:'Toate',
-      cat_bijuterii:'Bijuterii', cat_par:'Accesorii de păr', cat_genti:'Genți & pungi', cat_cadou:'Cadouri gata',
-      sec_head:'Alese cu drag', products_word:'produse', order_items:'produse',
-      promise1_t:'Împachetat cu grijă', promise1_d:'Fiecare comandă vine gata de dăruit — hârtie, panglică și un bilețel de la tine.',
-      promise2_t:'Livrare în Chișinău', promise2_d:'Comanzi azi, ajunge mâine. În oraș, livrare gratuită de la 300 lei.',
-      promise3_t:'Piese în ediție mică', promise3_d:'Aducem cantități mici, așa că rareori o să vezi pe altcineva cu aceeași piesă.',
-      foot_tagline:'Accesorii mici și cadouri împachetate cu grijă, din Chișinău.',
-      foot_shop:'Magazin', foot_help:'Ajutor', foot_write:'Scrie-ne', foot_delivery:'Livrare', foot_returns:'Retur', foot_contact:'Contact',
-      cart_title:'Coșul tău', cart_empty:'Coșul tău e gol', cart_empty_sub:'Adaugă câteva accesorii ca să apară aici.',
-      cart_total:'Total', cart_checkout:'Finalizează comanda',
-      form_title:'Finalizează comanda', form_sub:'Completează datele de livrare ca să-ți trimitem comanda.',
-      l_prenume:'Prenume', l_nume:'Nume', l_email:'Email', l_tara:'Țară', l_oras:'Oraș', l_cod:'Cod poștal', form_submit:'Trimite comanda',
-      tag_nou:'Nou', tag_popular:'Popular', opt_delivery:'Livrare (plata la primire)', opt_pickup:'Ridicare personală', l_telefon:'Telefon', pickup_note:'Te așteptăm la: Chișinău, str. Exemplu 1. Îți confirmăm ora pe telefon.', m_city:'Adaugă orașul pentru livrare.',
-      m_added:'adăugat în coș 🌷', m_cart_empty:'Coșul e gol 🌸', m_fill:'Completează prenume, nume și email.',
-      m_keys:'Adaugă întâi cheile Supabase în cod.', m_sending:'Se trimite...', m_created:'Comandă trimisă! Îți mulțumim 🌷',
-      m_save_err:'Eroare la salvare. Verifică Supabase.', m_net_err:'Eroare de rețea. Încearcă din nou.', no_products:'Încă nu sunt produse. Adaugă din panoul de admin.', opt_courier:'Livrare prin curier', co_back:'← înapoi la magazin', co_cart:'Coșul de cumpărături', co_method:'Metoda de livrare', co_city:'Orașul livrării', co_city_ph:'Alege orașul', co_date:'Data', co_time:'Ora', time_op:'Stabiliți cu operatorul', co_msg:'Mesaj pe felicitare', co_msg_ph:'Câteva cuvinte care vor fi printate pe felicitare', co_subtotal:'Subtotal', co_promo:'Ai un cod promoțional?', co_total:'TOTAL', co_continue:'Continuă', co_contact:'Datele tale', l_adresa:'Adresă (stradă, nr.)', co_back_btn:'Înapoi', co_done_t:'Comandă trimisă!', co_done_p:'Îți mulțumim! Te contactăm în curând pentru confirmare.', co_back_shop:'Înapoi la magazin', co_empty:'Coșul e gol.' },
-    ru:{ nav_shop:'Магазин', nav_why:'Почему Canapix', nav_gifts:'Подарки', nav_contact:'Контакты', account:'Аккаунт',
-      hero_eyebrow:'Аксессуары и маленькие подарки', hero_title:'Мелочи, которые <em>меняют</em> весь день.',
-      hero_p:'Серьги, заколки, браслеты и аккуратно упакованные подарки — выбраны с любовью, готовы дарить.',
-      hero_cta1:'Открыть коллекцию', hero_cta2:'Подарки до 200 лей', chip_all:'Все',
-      cat_bijuterii:'Украшения', cat_par:'Аксессуары для волос', cat_genti:'Сумки и пакеты', cat_cadou:'Готовые подарки',
-      sec_head:'Выбрано с любовью', products_word:'товаров', order_items:'товаров',
-      promise1_t:'Упаковано с заботой', promise1_d:'Каждый заказ готов к дарению — бумага, лента и открытка от тебя.',
-      promise2_t:'Доставка по Кишинёву', promise2_d:'Заказал сегодня — завтра у тебя. По городу доставка бесплатна от 300 лей.',
-      promise3_t:'Ограниченные партии', promise3_d:'Привозим маленькими партиями, поэтому редко встретишь кого-то с той же вещью.',
-      foot_tagline:'Маленькие аксессуары и аккуратно упакованные подарки из Кишинёва.',
-      foot_shop:'Магазин', foot_help:'Помощь', foot_write:'Напишите нам', foot_delivery:'Доставка', foot_returns:'Возврат', foot_contact:'Контакты',
-      cart_title:'Твоя корзина', cart_empty:'Корзина пуста', cart_empty_sub:'Добавь аксессуары, и они появятся здесь.',
-      cart_total:'Итого', cart_checkout:'Оформить заказ',
-      form_title:'Оформление заказа', form_sub:'Заполни данные для доставки, чтобы мы отправили заказ.',
-      l_prenume:'Имя', l_nume:'Фамилия', l_email:'Почта', l_tara:'Страна', l_oras:'Город', l_cod:'Индекс', form_submit:'Отправить заказ',
-      tag_nou:'Новинка', tag_popular:'Хит', opt_delivery:'Доставка (оплата при получении)', opt_pickup:'Самовывоз', l_telefon:'Телефон', pickup_note:'Ждём тебя: Кишинёв, ул. Пример 1. Время подтвердим по телефону.', m_city:'Укажи город для доставки.',
-      m_added:'добавлено в корзину 🌷', m_cart_empty:'Корзина пуста 🌸', m_fill:'Заполни имя, фамилию и почту.',
-      m_keys:'Сначала добавь ключи Supabase в код.', m_sending:'Отправка...', m_created:'Заказ отправлен! Спасибо 🌷',
-      m_save_err:'Ошибка сохранения. Проверь Supabase.', m_net_err:'Ошибка сети. Попробуй снова.', no_products:'Товаров пока нет. Добавь их в админ-панели.', opt_courier:'Доставка курьером', co_back:'← назад в магазин', co_cart:'Корзина', co_method:'Способ получения', co_city:'Город доставки', co_city_ph:'Выберите город', co_date:'Дата', co_time:'Время', time_op:'Уточнить с оператором', co_msg:'Сообщение на открытке', co_msg_ph:'Пару слов, которые напечатаем на открытке', co_subtotal:'Подытог', co_promo:'Есть промокод?', co_total:'ИТОГО', co_continue:'Продолжить', co_contact:'Твои данные', l_adresa:'Адрес (улица, дом)', co_back_btn:'Назад', co_done_t:'Заказ отправлен!', co_done_p:'Спасибо! Мы скоро свяжемся для подтверждения.', co_back_shop:'Вернуться в магазин', co_empty:'Корзина пуста.' },
-    en:{ nav_shop:'Shop', nav_why:'Why Canapix', nav_gifts:'Gifts', nav_contact:'Contact', account:'Account',
-      hero_eyebrow:'Accessories & little gifts', hero_title:'Small details that <em>change</em> the whole day.',
-      hero_p:'Earrings, clips, bracelets and carefully wrapped gifts — hand-picked and ready to give.',
-      hero_cta1:'Explore the collection', hero_cta2:'Gifts under 200 lei', chip_all:'All',
-      cat_bijuterii:'Jewelry', cat_par:'Hair accessories', cat_genti:'Bags & pouches', cat_cadou:'Ready gifts',
-      sec_head:'Chosen with love', products_word:'products', order_items:'products',
-      promise1_t:'Carefully wrapped', promise1_d:'Every order comes ready to gift — paper, ribbon and a note from you.',
-      promise2_t:'Delivery in Chișinău', promise2_d:'Order today, get it tomorrow. Free city delivery from 300 lei.',
-      promise3_t:'Small-batch pieces', promise3_d:'We stock small quantities, so you will rarely see someone with the same piece.',
-      foot_tagline:'Small accessories and carefully wrapped gifts, from Chișinău.',
-      foot_shop:'Shop', foot_help:'Help', foot_write:'Contact us', foot_delivery:'Delivery', foot_returns:'Returns', foot_contact:'Contact',
-      cart_title:'Your cart', cart_empty:'Your cart is empty', cart_empty_sub:'Add some accessories and they will show up here.',
-      cart_total:'Total', cart_checkout:'Complete order',
-      form_title:'Complete your order', form_sub:'Fill in your delivery details so we can send your order.',
-      l_prenume:'First name', l_nume:'Last name', l_email:'Email', l_tara:'Country', l_oras:'City', l_cod:'Postal code', form_submit:'Place order',
-      tag_nou:'New', tag_popular:'Popular', opt_delivery:'Delivery (pay on arrival)', opt_pickup:'Pickup', l_telefon:'Phone', pickup_note:'Come to: Chișinău, Exemplu St. 1. We will confirm the time by phone.', m_city:'Add your city for delivery.',
-      m_added:'added to cart 🌷', m_cart_empty:'Cart is empty 🌸', m_fill:'Fill in first name, last name and email.',
-      m_keys:'Add your Supabase keys in the code first.', m_sending:'Sending...', m_created:'Order placed! Thank you 🌷',
-      m_save_err:'Save error. Check Supabase.', m_net_err:'Network error. Try again.', no_products:'No products yet. Add them from the admin panel.', opt_courier:'Courier delivery', co_back:'← back to shop', co_cart:'Shopping cart', co_method:'Delivery method', co_city:'Delivery city', co_city_ph:'Choose the city', co_date:'Date', co_time:'Time', time_op:'Confirm with operator', co_msg:'Card message', co_msg_ph:'A few words to print on the card', co_subtotal:'Subtotal', co_promo:'Have a promo code?', co_total:'TOTAL', co_continue:'Continue', co_contact:'Your details', l_adresa:'Address (street, no.)', co_back_btn:'Back', co_done_t:'Order placed!', co_done_p:'Thank you! We will contact you soon to confirm.', co_back_shop:'Back to shop', co_empty:'Cart is empty.' }
-  };
-
-  /* ---------- SVG produse ---------- */
-  function earrings(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#836691" stroke-width="3"><circle cx="35" cy="28" r="6"/><path d="M35 34 L35 50"/><circle cx="35" cy="58" r="9" fill="#9B7BA3" stroke="none"/><circle cx="65" cy="28" r="6"/><path d="M65 34 L65 50"/><circle cx="65" cy="58" r="9" fill="#9B7BA3" stroke="none"/></svg>';}
-  function ring(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#7E9A76" stroke-width="4"><circle cx="50" cy="58" r="24"/><path d="M40 30 L50 44 L60 30 Z" fill="#B7A2CC" stroke="#836691" stroke-width="2.5"/></svg>';}
-  function necklace(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#836691" stroke-width="3"><path d="M22 24 Q50 70 78 24"/><circle cx="50" cy="66" r="10" fill="#F4D9D6" stroke="#836691"/></svg>';}
-  function clip(){return '<svg viewBox="0 0 100 100" fill="none"><g stroke="#4A3F46" stroke-width="3"><rect x="24" y="46" width="52" height="12" rx="6" fill="#FFFDFB"/><circle cx="50" cy="38" r="9" fill="#F4D9D6"/><circle cx="38" cy="44" r="7" fill="#DED2EA"/><circle cx="62" cy="44" r="7" fill="#C3D5BD"/></g></svg>';}
-  function scrunchie(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#9B7BA3" stroke-width="9"><circle cx="50" cy="52" r="26" stroke-dasharray="6 7"/></svg>';}
-  function bracelet(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#7E9A76" stroke-width="3"><ellipse cx="50" cy="52" rx="30" ry="22"/><circle cx="50" cy="30" r="6" fill="#FFFDFB"/><circle cx="76" cy="52" r="6" fill="#F4D9D6"/><circle cx="24" cy="52" r="6" fill="#DED2EA"/></svg>';}
-  function pouch(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#4A3F46" stroke-width="3"><path d="M30 42 h40 l-5 38 h-30 Z" fill="#DED2EA"/><path d="M38 42 q12 -18 24 0"/><path d="M40 30 q10 8 20 0" stroke="#836691"/></svg>';}
-  function bag(){return '<svg viewBox="0 0 100 100" fill="none" stroke="#4A3F46" stroke-width="3"><rect x="26" y="44" width="48" height="34" rx="7" fill="#F6E9C7"/><path d="M38 44 v-6 a12 12 0 0 1 24 0 v6"/></svg>';}
-
-  /* ---------- produse ---------- */
-  const SAMPLE = [
-    {id:'demo-cercei', names:{ro:'Cercei Rouă', ru:'Серьги «Роса»', en:'Dew earrings'}, desc:{ro:'Argint 925, lungime 3 cm.', ru:'Серебро 925, длина 3 см.', en:'925 silver, 3 cm long.'}, c:'bijuterii', price:180, tag:'nou', tint:'var(--blush)', art:earrings(), image_url:null},
-    {id:'demo-inel', names:{ro:'Inel delicat', ru:'Изящное кольцо', en:'Delicate ring'}, c:'bijuterii', price:150, tag:'', tint:'var(--sage)', art:ring(), image_url:null},
-    {id:'demo-colier', names:{ro:'Colier fin', ru:'Тонкое колье', en:'Fine necklace'}, c:'bijuterii', price:220, tag:'', tint:'var(--lilac)', art:necklace(), image_url:null},
-    {id:'demo-agrafa', names:{ro:'Agrafă floare', ru:'Заколка-цветок', en:'Flower hair clip'}, c:'par', price:90, tag:'popular', tint:'var(--butter)', art:clip(), image_url:null},
-    {id:'demo-scrunchie', names:{ro:'Scrunchie mătase', ru:'Шёлковая резинка', en:'Silk scrunchie'}, c:'par', price:70, tag:'', tint:'var(--blush)', art:scrunchie(), image_url:null},
-    {id:'demo-bratara', names:{ro:'Brățară cu perle', ru:'Браслет с жемчугом', en:'Pearl bracelet'}, c:'bijuterii', price:160, tag:'', tint:'var(--sage)', art:bracelet(), image_url:null},
-    {id:'demo-punga', names:{ro:'Pungă cadou', ru:'Подарочный пакет', en:'Gift pouch'}, c:'cadou', price:120, tag:'', tint:'var(--lilac)', art:pouch(), image_url:null},
-    {id:'demo-geanta', names:{ro:'Geantă mini', ru:'Мини-сумка', en:'Mini bag'}, c:'genti', price:340, tag:'nou', tint:'var(--butter)', art:bag(), image_url:null}
-  ];
-  let PRODUCTS = SAMPLE.slice();
-
-  /* ---------- stare ---------- */
-  let lang = 'ro';
-  let currentFilter = 'all';
-  let deliveryMethod = 'livrare';
-  const cart = {};   // key -> cantitate
-  const $ = id => document.getElementById(id);
-  const prod = id => PRODUCTS.find(p => p.id === id);
-
-  /* ---------- limbă ---------- */
-  function setLang(l){
-    lang = l;
-    document.documentElement.setAttribute('lang', l);
-    document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if(T[l][k]!=null) el.textContent = T[l][k]; });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => { const k = el.dataset.i18nHtml; if(T[l][k]!=null) el.innerHTML = T[l][k]; });
-    document.querySelectorAll('[data-i18n-ph]').forEach(el => { const k = el.dataset.i18nPh; if(T[l][k]!=null) el.placeholder = T[l][k]; });
-    document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
-    render(currentFilter);
-    renderCart();
-    if($('checkoutView').classList.contains('open')){ renderCoItems(); updateCoTotals(); }
-  }
-
-  /* ---------- temă ---------- */
-  function toggleTheme(){
-    const root = document.documentElement;
-    const dark = root.getAttribute('data-theme') === 'dark';
-    root.setAttribute('data-theme', dark ? 'light' : 'dark');
-    $('themeBtn').textContent = dark ? '☾' : '☀';
-  }
-
-  /* ---------- catalog ---------- */
-  const grid = $('grid');
-  function media(p){ return p.image_url ? '<img src="'+p.image_url+'" alt="" class="thumb-img">' : (p.art || ''); }
-  function render(f='all'){
-    currentFilter = f;
-    const list = f==='all' ? PRODUCTS : PRODUCTS.filter(p => p.c === f);
-    if(list.length === 0){ grid.innerHTML = '<p style="grid-column:1/-1;color:var(--ink-soft);padding:30px 4px">'+T[lang].no_products+'</p>'; $('shown').textContent = '0 '+T[lang].products_word; return; }
-    grid.innerHTML = list.map(p => {
-      const name = p.names[lang];
-      const catLabel = T[lang]['cat_'+p.c] || p.c;
-      const tagLabel = p.tag ? (T[lang]['tag_'+p.tag] || p.tag) : '';
-      return '<article class="card">'
-        + '<div class="thumb" style="background:'+(p.tint||'var(--blush)')+'">'
-        + (tagLabel ? '<span class="tag">'+tagLabel+'</span>' : '')
-        + media(p) + '</div>'
-        + '<div class="body"><h3>'+name+'</h3><span class="desc">'+catLabel+'</span>'+ (p.desc && p.desc[lang] ? '<p class="prod-desc">'+p.desc[lang]+'</p>' : '')
-        + '<div class="row"><span class="price">'+p.price+' <small>lei</small></span>'
-        + '<button class="add" onclick="add(\''+p.id+'\')" aria-label="+">+</button></div></div></article>';
-    }).join('');
-    $('shown').textContent = list.length + ' ' + T[lang].products_word;
-  }
-  function filter(el, f){
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    render(f);
-  }
-
-  /* ---------- coș ---------- */
-  function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
-  function cartSum(){ return Object.entries(cart).reduce((s,[k,q])=>{ const p=prod(k); return s+(p?p.price*q:0); },0); }
-  function updateBadge(){ $('count').textContent = cartCount(); }
-
-  function add(key){ cart[key]=(cart[key]||0)+1; updateBadge(); renderCart(); showToast(prod(key).names[lang]+' '+T[lang].m_added); }
-  function changeQty(key,d){ cart[key]=(cart[key]||0)+d; if(cart[key]<=0) delete cart[key]; updateBadge(); renderCart(); }
-  function removeItem(key){ delete cart[key]; updateBadge(); renderCart(); }
-  function openCart(){ $('cartOverlay').classList.add('open'); }
-  function closeCart(){ $('cartOverlay').classList.remove('open'); }
-  function checkout(){
-    if(cartCount()===0){ showToast(T[lang].m_cart_empty); return; }
-    closeCart(); openCheckout();
-  }
-
-  function renderCart(){
-    const body = $('cartBody'), foot = $('cartFoot');
-    const keys = Object.keys(cart);
-    if(keys.length === 0){
-      body.innerHTML = '<p class="cart-empty">'+T[lang].cart_empty+' 🌸<br><span>'+T[lang].cart_empty_sub+'</span></p>';
-      foot.style.display = 'none'; return;
-    }
-    body.innerHTML = keys.map(k => {
-      const p = prod(k), q = cart[k];
-      return '<div class="cart-item">'
-        + '<div class="ci-thumb" style="background:'+(p.tint||'var(--blush)')+'">'+media(p)+'</div>'
-        + '<div class="ci-info"><span class="ci-name">'+p.names[lang]+'</span><span class="ci-price">'+p.price+' lei × '+q+'</span></div>'
-        + '<div class="ci-qty"><button onclick="changeQty(\''+k+'\',-1)">−</button><span>'+q+'</span><button onclick="changeQty(\''+k+'\',1)">+</button></div>'
-        + '<button class="ci-remove" onclick="removeItem(\''+k+'\')" aria-label="x">×</button></div>';
-    }).join('');
-    $('cartTotal').textContent = cartSum() + ' lei';
-    foot.style.display = 'block';
-  }
-  $('cartOverlay').addEventListener('click', e => { if(e.target.id==='cartOverlay') closeCart(); });
-
-  let toastT;
-  function showToast(msg){
-    const t = $('toast');
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
-  }
-
-  /* ---------- formular / Supabase ---------- */
-  function setDelivery(m){
-    deliveryMethod = m;
-    const courier = m === 'livrare';
-    if($('coDelivery')) $('coDelivery').style.display = courier ? 'block' : 'none';
-    if($('coAddr')) $('coAddr').style.display = courier ? 'block' : 'none';
-    document.querySelectorAll('input[name=dm]').forEach(r => { r.checked = (r.value === m); });
-  }
-  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeCart(); closeCheckout(); } });
-
-  /* ============================================================
-     SUPABASE — înlocuiește cele 2 valori cu ale tale
-     (Project URL și cheia anon din Settings → API)
-     ============================================================ */
+  /* ==== те же ключи, что и в index.html ==== */
   const SUPABASE_URL = "https://dlvdhgjdgyylksepsuas.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsdmRoZ2pkZ3l5bGtzZXBzdWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0OTkzODQsImV4cCI6MjA5OTA3NTM4NH0.9LLL288T3iz406_mGPdaWzJbg3ar_SsJcSGfQ5-Ceac";
-  /* ============================================================ */
+  /* ========================================= */
 
-  /* ============================================================
-     EMAILJS — pentru emailul de confirmare către client
-     (Public Key + Service ID + Template ID din dashboard-ul EmailJS)
-     ============================================================ */
-  const EMAILJS_PUBLIC   = "PUNE_PUBLIC_KEY";
-  const EMAILJS_SERVICE  = "PUNE_SERVICE_ID";
-  const EMAILJS_TEMPLATE = "PUNE_TEMPLATE_ID";
-  if(typeof emailjs !== 'undefined' && !EMAILJS_PUBLIC.includes('PUNE')){ emailjs.init({ publicKey: EMAILJS_PUBLIC }); }
-  /* ============================================================ */
+  const $ = id => document.getElementById(id);
+  let token = null;
+  const catName = { bijuterii:'Украшения', par:'Аксессуары для волос', genti:'Сумки и пакеты', cadou:'Готовые подарки' };
 
-  function sendOrderEmail(data, comanda, total){
-    if(typeof emailjs === 'undefined' || EMAILJS_SERVICE.includes('PUNE') || EMAILJS_TEMPLATE.includes('PUNE')) return;
-    const courier = data.livrare === 'livrare';
-    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      to_email: data.email,
-      prenume: data.prenume, nume: data.nume, telefon: data.telefon,
-      livrare: courier ? 'Livrare prin curier' : 'Ridicare personală',
-      oras: data.oras || '—',
-      adresa: courier ? ((data.adresa ? data.adresa + ', ' : '') + (data.oras || '') + (data.cod_postal ? ', ' + data.cod_postal : '')) : '—',
-      data_livrare: data.data_livrare || '—',
-      ora_livrare: data.ora_livrare || '—',
-      mesaj: data.mesaj || '—',
-      comanda: comanda,
-      total: total + ' lei'
-    }).catch(e => console.error('email:', e));
-  }
-
-  // ---------- CHECKOUT ----------
-  function openCheckout(){
-    renderCoItems(); updateCoTotals(); setStep(1);
-    $('coStep1').style.display='block'; $('coStep2').style.display='none'; $('coStep3').style.display='none';
-    setDelivery(deliveryMethod);
-    $('checkoutView').classList.add('open'); window.scrollTo(0,0);
-  }
-  function closeCheckout(){ $('checkoutView').classList.remove('open'); }
-
-  function renderCoItems(){
-    const box=$('coItems'); const keys=Object.keys(cart);
-    if(!keys.length){ box.innerHTML='<p style="color:var(--ink-soft);padding:14px 0">'+T[lang].co_empty+'</p>'; return; }
-    box.innerHTML=keys.map(k=>{ const p=prod(k), q=cart[k];
-      return '<div class="co-item"><div class="th">'+media(p)+'</div>'
-        +'<div><div class="co-nm">'+p.names[lang]+'</div><div class="co-price">'+p.price+' lei</div></div>'
-        +'<div class="co-qty"><button onclick="coQty(\''+k+'\',-1)">\u2212</button><span>'+q+'</span><button onclick="coQty(\''+k+'\',1)">+</button></div>'
-        +'<div class="co-line">'+(p.price*q)+' lei</div>'
-        +'<button class="co-del" onclick="coDel(\''+k+'\')" aria-label="x">\ud83d\uddd1</button></div>';
-    }).join('');
-  }
-  function coQty(k,d){ cart[k]=(cart[k]||0)+d; if(cart[k]<=0) delete cart[k]; updateBadge(); renderCart(); renderCoItems(); updateCoTotals(); }
-  function coDel(k){ delete cart[k]; updateBadge(); renderCart(); renderCoItems(); updateCoTotals(); }
-  function updateCoTotals(){ const s=cartSum()+' lei'; $('coSubtotal').textContent=s; $('coTotal').textContent=s; $('coTotal2').textContent=s; }
-
-  function setStep(n){ [1,2,3].forEach(i=>{ const el=$('st'+i); el.classList.remove('active','done'); if(i<n) el.classList.add('done'); else if(i===n) el.classList.add('active'); }); }
-  function goStep2(){
-    if(!cartCount()){ showToast(T[lang].m_cart_empty); return; }
-    if(deliveryMethod==='livrare' && !$('co-oras').value){ showToast(T[lang].m_city); return; }
-    $('coStep1').style.display='none'; $('coStep2').style.display='block'; setStep(2);
-  }
-  function goStep1(){ $('coStep2').style.display='none'; $('coStep1').style.display='block'; setStep(1); }
-  function togglePromo(){ const b=$('promoBox'); b.style.display = b.style.display==='none' ? 'block' : 'none'; }
-
-  async function submitOrder(){
-    const msg=$('coMsg'), btn=$('coFinal'), g=id=>$(id).value.trim();
-    const courier = deliveryMethod==='livrare';
-    const data={ prenume:g('co-prenume'), nume:g('co-nume'), email:g('co-email'), telefon:g('co-telefon'),
-      livrare:deliveryMethod, oras:courier?g('co-oras'):'', adresa:courier?g('co-adresa'):'', cod_postal:courier?g('co-cod'):'',
-      data_livrare:courier?g('co-data'):'', ora_livrare:courier?g('co-ora'):'', mesaj:g('co-mesaj') };
-    if(!data.prenume || !data.nume || !data.email){ msg.className='form-msg err'; msg.textContent=T[lang].m_fill; return; }
-    const comandaText=Object.entries(cart).map(([id,q])=>{ const p=prod(id); return p.names[lang]+' \u00d7 '+q+' \u2014 '+(p.price*q)+' lei'; }).join('\n');
-    const comandaTotal=cartSum();
-    if(SUPABASE_URL.includes('XXXX') || SUPABASE_ANON_KEY.includes('PUNE_AICI')){ msg.className='form-msg err'; msg.textContent=T[lang].m_keys; return; }
-    btn.disabled=true; msg.className='form-msg'; msg.textContent=T[lang].m_sending;
+  async function login(){
+    const msg = $('loginMsg'), btn = $('loginBtn');
+    const email = $('email').value.trim(), password = $('password').value;
+    if(!email || !password){ msg.className='msg err'; msg.textContent='Введите email и пароль.'; return; }
+    if(SUPABASE_URL.includes('XXXX')){ msg.className='msg err'; msg.textContent='Сначала впишите ключи Supabase в код.'; return; }
+    btn.disabled=true; msg.className='msg'; msg.textContent='Вход…';
     try{
-      const r=await fetch(SUPABASE_URL+'/rest/v1/clienti',{ method:'POST',
-        headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+SUPABASE_ANON_KEY, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
-        body: JSON.stringify(data) });
-      if(r.ok){
-        sendOrderEmail(data, comandaText, comandaTotal);
-        Object.keys(cart).forEach(k=>delete cart[k]); updateBadge(); renderCart();
-        $('coStep2').style.display='none'; $('coStep3').style.display='block'; setStep(3);
-      }else{ const t=await r.text(); msg.className='form-msg err'; msg.textContent=T[lang].m_save_err; console.error('Supabase:', t); }
-    }catch(e){ msg.className='form-msg err'; msg.textContent=T[lang].m_net_err; console.error(e); }
+      const r = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+        method:'POST',
+        headers:{ 'apikey':SUPABASE_ANON_KEY, 'Content-Type':'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const d = await r.json();
+      if(r.ok && d.access_token){
+        token = d.access_token;
+        $('who').textContent = email;
+        $('loginView').classList.add('hidden');
+        $('panelView').classList.remove('hidden');
+        loadList();
+      }else{
+        msg.className='msg err'; msg.textContent='Неверный email или пароль.';
+      }
+    }catch(e){ msg.className='msg err'; msg.textContent='Ошибка сети.'; console.error(e); }
     finally{ btn.disabled=false; }
   }
 
-  /* ---------- init ---------- */
-  async function loadProducts(){
-    if(SUPABASE_URL.includes('XXXX')){ render(); return; }   // fără chei -> produse demo
-    try{
-      const r = await fetch(SUPABASE_URL + '/rest/v1/produse?activ=eq.true&order=created_at.desc', {
-        headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+SUPABASE_ANON_KEY }
-      });
-      if(r.ok){
-        const rows = await r.json();
-        PRODUCTS = rows.map(x => ({
-          id:String(x.id),
-          names:{ ro:x.nume_ro||'', ru:x.nume_ru||x.nume_ro||'', en:x.nume_en||x.nume_ro||'' },
-          desc:{ ro:x.desc_ro||'', ru:x.desc_ru||x.desc_ro||'', en:x.desc_en||x.desc_ro||'' },
-          c:x.categorie||'bijuterii', price:x.pret||0, tag:x.tag||'',
-          image_url:x.image_url||null, art:null, tint:'var(--blush)'
-        }));
-      }
-    }catch(e){ console.error('produse:', e); }
-    render();
+  function logout(){ token=null; $('panelView').classList.add('hidden'); $('loginView').classList.remove('hidden'); $('password').value=''; }
+
+  function previewPhoto(){
+    const f = $('p-photo').files[0], img = $('preview');
+    if(f){ img.src = URL.createObjectURL(f); img.style.display='block'; } else { img.style.display='none'; }
   }
-  loadProducts();
-  renderCart();
+
+  let editingId = null;
+
+  function cancelEdit(){
+    editingId = null;
+    ['p-ro','p-ru','p-en','p-price','d-ro','d-ru','d-en'].forEach(id=>$(id).value='');
+    $('p-photo').value=''; $('preview').style.display='none';
+    $('p-cat').value='bijuterii'; $('p-tag').value='';
+    $('addBtn').textContent = 'Добавить товар';
+    $('photoLabel').textContent = 'Фото товара';
+    $('cancelBtn').classList.add('hidden');
+    $('addMsg').textContent = '';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function editProduct(p){
+    editingId = p.id;
+    $('p-ro').value = p.nume_ro || '';
+    $('p-ru').value = p.nume_ru || '';
+    $('p-en').value = p.nume_en || '';
+    $('p-cat').value = p.categorie || 'bijuterii';
+    $('p-price').value = p.pret || '';
+    $('p-tag').value = p.tag || '';
+    $('d-ro').value = p.desc_ro || '';
+    $('d-ru').value = p.desc_ru || '';
+    $('d-en').value = p.desc_en || '';
+    $('p-photo').value=''; $('preview').style.display='none';
+    $('addBtn').textContent = 'Сохранить изменения';
+    $('photoLabel').textContent = 'Фото (оставь пустым, чтобы не менять)';
+    $('cancelBtn').classList.remove('hidden');
+    $('addMsg').textContent = '';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  async function saveProduct(){
+    const msg = $('addMsg'), btn = $('addBtn');
+    const ro=$('p-ro').value.trim(), ru=$('p-ru').value.trim(), en=$('p-en').value.trim();
+    const cat=$('p-cat').value, price=parseFloat($('p-price').value), tag=$('p-tag').value;
+    const dro=$('d-ro').value.trim(), dru=$('d-ru').value.trim(), den=$('d-en').value.trim();
+    const file=$('p-photo').files[0];
+    if(!ro || !price){ msg.className='msg err'; msg.textContent='Нужны минимум название (RO) и цена.'; return; }
+    btn.disabled=true; msg.className='msg'; msg.textContent='Сохранение…';
+    try{
+      let image_url = null;
+      if(file){
+        msg.textContent='Загрузка фото…';
+        const clean = file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        const path = Date.now() + '_' + clean;
+        const up = await fetch(SUPABASE_URL + '/storage/v1/object/produse/' + path, {
+          method:'POST',
+          headers:{ 'Authorization':'Bearer '+token, 'apikey':SUPABASE_ANON_KEY, 'Content-Type':file.type, 'x-upsert':'true' },
+          body: file
+        });
+        if(!up.ok){ const t=await up.text(); throw new Error('upload: '+t); }
+        image_url = SUPABASE_URL + '/storage/v1/object/public/produse/' + path;
+      }
+      msg.textContent='Сохранение…';
+      const payload = { nume_ro:ro, nume_ru:ru||ro, nume_en:en||ro, categorie:cat, pret:price, tag:tag, desc_ro:dro, desc_ru:dru, desc_en:den };
+      if(image_url) payload.image_url = image_url;
+      let r;
+      if(editingId){
+        r = await fetch(SUPABASE_URL + '/rest/v1/produse?id=eq.' + editingId, {
+          method:'PATCH',
+          headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+token, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+          body: JSON.stringify(payload)
+        });
+      }else{
+        payload.activ = true;
+        r = await fetch(SUPABASE_URL + '/rest/v1/produse', {
+          method:'POST',
+          headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+token, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+          body: JSON.stringify(payload)
+        });
+      }
+      if(r.ok){
+        msg.className='msg ok'; msg.textContent = editingId ? 'Товар обновлён ✓' : 'Товар добавлен ✓';
+        cancelEdit();
+        loadList();
+      }else{ const t=await r.text(); msg.className='msg err'; msg.textContent='Ошибка сохранения.'; console.error(t); }
+    }catch(e){ msg.className='msg err'; msg.textContent='Ошибка: '+e.message; console.error(e); }
+    finally{ btn.disabled=false; }
+  }
+
+  async function loadList(){
+    const box = $('list');
+    try{
+      const r = await fetch(SUPABASE_URL + '/rest/v1/produse?order=created_at.desc', {
+        headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+(token||SUPABASE_ANON_KEY) }
+      });
+      const rows = await r.json();
+      $('cnt').textContent = rows.length;
+      if(!rows.length){ box.innerHTML = '<p class="muted">Пока нет товаров. Добавьте первый выше.</p>'; return; }
+      window._prodList = rows;
+      box.innerHTML = rows.map((p,i) => {
+        const img = p.image_url ? '<img src="'+p.image_url+'" alt="">' : '<img alt="">';
+        return '<div class="list-item">'+img
+          + '<div><div class="li-name">'+(p.nume_ru||p.nume_ro)+'</div>'
+          + '<div class="li-meta">'+(catName[p.categorie]||p.categorie)+' · '+p.pret+' лей</div></div>'
+          + '<div><button class="edit" onclick="editProduct(window._prodList['+i+'])">Изменить</button>'
+          + '<button class="del" onclick="delProduct('+p.id+')">Удалить</button></div></div>';
+      }).join('');
+    }catch(e){ box.innerHTML='<p class="msg err">Не удалось загрузить список.</p>'; console.error(e); }
+  }
+
+  async function delProduct(id){
+    if(!confirm('Удалить этот товар?')) return;
+    try{
+      const r = await fetch(SUPABASE_URL + '/rest/v1/produse?id=eq.' + id, {
+        method:'DELETE',
+        headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+token }
+      });
+      if(r.ok){ loadList(); } else { alert('Не удалось удалить.'); }
+    }catch(e){ console.error(e); alert('Ошибка сети.'); }
+  }
 </script>
 </body>
 </html>
