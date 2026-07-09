@@ -122,10 +122,18 @@
         </select>
       </div>
     </div>
-    <label for="p-photo">Фото товара</label>
+    <div class="row3">
+      <div><label for="d-ro">Описание (RO)</label><textarea id="d-ro" rows="3" placeholder="Argint 925, lungime 3 cm."></textarea></div>
+      <div><label for="d-ru">Описание (RU)</label><textarea id="d-ru" rows="3" placeholder="Серебро 925, длина 3 см."></textarea></div>
+      <div><label for="d-en">Описание (EN)</label><textarea id="d-en" rows="3" placeholder="925 silver, 3 cm long."></textarea></div>
+    </div>
+    <label for="p-photo" id="photoLabel">Фото товара</label>
     <input id="p-photo" type="file" accept="image/*" onchange="previewPhoto()">
     <img id="preview" class="preview" alt="">
-    <div style="margin-top:16px"><button class="btn" id="addBtn" onclick="addProduct()">Добавить товар</button></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="addBtn" onclick="saveProduct()">Добавить товар</button>
+      <button class="btn btn-ghost hidden" id="cancelBtn" onclick="cancelEdit()">Отмена</button>
+    </div>
     <p class="msg" id="addMsg"></p>
   </div>
 
