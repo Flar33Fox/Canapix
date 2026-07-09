@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canapix — Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#FBF4F2; --surface:#FFFDFB; --blush:#F4D9D6; --sage:#C3D5BD; --lilac:#DED2EA;
+    --ink:#4A3F46; --ink-soft:#8A7F86; --plum:#9B7BA3; --plum-deep:#836691; --line:#EFE2E0;
+    --sage-deep:#7E9A76;
+    --shadow:0 12px 30px -18px rgba(120,90,110,.35); }
+  [data-theme="dark"]{ --bg:#1d1922; --surface:#282230; --ink:#ECE7EF; --ink-soft:#A99FB2; --line:#37303F;
+    --plum:#B98CC6; --plum-deep:#CBAAD6; --shadow:0 14px 34px -18px rgba(0,0,0,.6); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Karla',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;
+    transition:background .3s,color .3s;padding:22px 22px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;display:flex;align-items:center;gap:9px;
+    color:var(--ink);text-decoration:none}
+  .logo .dot{width:11px;height:11px;border-radius:50%;background:var(--plum)}
+  .head-links{display:flex;gap:16px;align-items:center}
+  .head-links a{color:var(--ink-soft);text-decoration:none;font-weight:600;font-size:.9rem}
+  .head-links a:hover{color:var(--plum-deep)}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(2rem,4vw,2.8rem);letter-spacing:-.01em;margin-bottom:8px}
+  .sub{color:var(--ink-soft);margin-bottom:30px}
+  .lang{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:2px}
+  .lang button{border:none;background:none;padding:5px 8px;border-radius:99px;cursor:pointer;
+    font-family:'Karla';font-weight:700;font-size:.75rem;color:var(--ink-soft);line-height:1}
+  .lang button.active{background:var(--ink);color:var(--surface)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .art{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;
+    transition:transform .2s,box-shadow .2s}
+  .art:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .art .thumb{aspect-ratio:16/10;overflow:hidden;background:var(--blush)}
+  .art .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .art .body{padding:18px}
+  .art .eye{color:var(--sage-deep);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .art h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem;margin-bottom:8px}
+  .art p{color:var(--ink-soft);font-size:.92rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .empty{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:38px;text-align:center;color:var(--ink-soft)}
+
+  .overlay{position:fixed;inset:0;background:rgba(30,25,34,.5);backdrop-filter:blur(4px);
+    z-index:50;display:none;align-items:flex-start;justify-content:center;padding:34px 20px;overflow-y:auto}
+  .overlay.open{display:flex}
+  .modal{background:var(--surface);border-radius:22px;max-width:720px;width:100%;overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(30,20,30,.5);position:relative}
+  .modal .thumb{aspect-ratio:16/8;overflow:hidden;background:var(--blush)}
+  .modal .thumb img{width:100%;height:100%;object-fit:cover}
+  .modal .m-body{padding:30px 32px}
+  .modal .eye{color:var(--sage-deep);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+  .modal h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.9rem;margin-bottom:14px;letter-spacing:-.01em}
+  .modal .txt{color:var(--ink);font-size:1rem;line-height:1.75;white-space:pre-wrap}
+  .close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.9);border:none;width:36px;height:36px;
+    border-radius:50%;cursor:pointer;font-size:1.3rem;color:var(--ink);display:grid;place-items:center}
+
+  @media(max-width:820px){ .grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:520px){ .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <a href="index.html" class="logo"><span class="dot"></span>Canapix</a>
+    <div class="head-links">
+      <div class="lang">
+        <button data-lang="ro" class="active" onclick="setLang('ro')">RO</button>
+        <button data-lang="ru" onclick="setLang('ru')">RU</button>
+        <button data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="index.html" id="backLink">← Magazin</a>
+    </div>
+  </div>
+  <h1 id="title">Blog</h1>
+  <p class="sub" id="sub">Idei, sfaturi și povești de la Canapix.</p>
+  <div id="list"><p class="empty">Loading…</p></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target.id==='overlay')closeArt()">
+  <div class="modal">
+    <button class="close" onclick="closeArt()">×</button>
+    <div class="thumb" id="mThumb"></div>
+    <div class="m-body">
+      <div class="eye" id="mEye"></div>
+      <h2 id="mTitle"></h2>
+      <div class="txt" id="mTxt"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://dlvdhgjdgyylksepsuas.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsdmRoZ2pkZ3l5bGtzZXBzdWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0OTkzODQsImV4cCI6MjA5OTA3NTM4NH0.9LLL288T3iz406_mGPdaWzJbg3ar_SsJcSGfQ5-Ceac";
+
+const T = {
+  ro:{ title:'Blog', sub:'Idei, sfaturi și povești de la Canapix.', back:'← Magazin', empty:'Încă nu sunt articole. Reveni curând.', eye:'Articol' },
+  ru:{ title:'Блог', sub:'Идеи, советы и истории от Canapix.', back:'← Магазин', empty:'Пока нет статей. Загляни позже.', eye:'Статья' },
+  en:{ title:'Blog', sub:'Ideas, tips and stories from Canapix.', back:'← Shop', empty:'No articles yet. Check back soon.', eye:'Article' }
+};
+let lang = 'ro';
+let ARTICLES = [];
+const $ = id => document.getElementById(id);
+
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  $('title').textContent = T[l].title;
+  $('sub').textContent = T[l].sub;
+  $('backLink').textContent = T[l].back;
+  render();
+}
+
+async function load(){
+  try{
+    const r = await fetch(SUPABASE_URL + '/rest/v1/articole?select=*&activ=eq.true&order=created_at.desc', {
+      headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+SUPABASE_ANON_KEY }
+    });
+    if(r.ok){ ARTICLES = await r.json(); }
+  }catch(e){ console.error(e); }
+  render();
+}
+function render(){
+  if(!ARTICLES.length){ $('list').innerHTML = '<p class="empty">'+T[lang].empty+'</p>'; return; }
+  $('list').innerHTML = '<div class="grid">' + ARTICLES.map((a,i) => {
+    const title = a['titlu_'+lang] || a.titlu_ro || '';
+    const preview = (a['text_'+lang] || a.text_ro || '').slice(0,180);
+    const img = a.image_url ? '<img src="'+a.image_url+'" alt="">' : '';
+    return '<article class="art" onclick="openArt('+i+')"><div class="thumb">'+img+'</div>'
+      +'<div class="body"><div class="eye">'+T[lang].eye+'</div>'
+      +'<h3>'+title+'</h3><p>'+preview+'</p></div></article>';
+  }).join('') + '</div>';
+}
+function openArt(i){
+  const a = ARTICLES[i];
+  $('mEye').textContent = T[lang].eye;
+  $('mTitle').textContent = a['titlu_'+lang] || a.titlu_ro || '';
+  $('mTxt').textContent = a['text_'+lang] || a.text_ro || '';
+  $('mThumb').innerHTML = a.image_url ? '<img src="'+a.image_url+'" alt="">' : '';
+  $('overlay').classList.add('open');
+}
+function closeArt(){ $('overlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeArt(); });
+load();
+</script>
+</body>
+</html>
