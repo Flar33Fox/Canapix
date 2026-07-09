@@ -271,22 +271,33 @@
   async function loadList(){
     const box = $('list');
     try{
-      const r = await fetch(SUPABASE_URL + '/rest/v1/produse?order=created_at.desc', {
+      const r = await fetch(SUPABASE_URL + '/rest/v1/produse?select=*&order=created_at.desc', {
         headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':'Bearer '+(token||SUPABASE_ANON_KEY) }
       });
+      if(!r.ok){
+        const t = await r.text();
+        box.innerHTML = '<p class="msg err">Ошибка загрузки: '+r.status+'. '+t+'</p>';
+        console.error('loadList status', r.status, t);
+        return;
+      }
       const rows = await r.json();
+      if(!Array.isArray(rows)){
+        box.innerHTML = '<p class="msg err">Неожиданный ответ от базы. См. консоль.</p>';
+        console.error('loadList response is not an array:', rows);
+        return;
+      }
       $('cnt').textContent = rows.length;
       if(!rows.length){ box.innerHTML = '<p class="muted">Пока нет товаров. Добавьте первый выше.</p>'; return; }
       window._prodList = rows;
       box.innerHTML = rows.map((p,i) => {
         const img = p.image_url ? '<img src="'+p.image_url+'" alt="">' : '<img alt="">';
         return '<div class="list-item">'+img
-          + '<div><div class="li-name">'+(p.nume_ru||p.nume_ro)+'</div>'
-          + '<div class="li-meta">'+(catName[p.categorie]||p.categorie)+' · '+p.pret+' лей</div></div>'
+          + '<div><div class="li-name">'+(p.nume_ru||p.nume_ro||'(без названия)')+'</div>'
+          + '<div class="li-meta">'+(catName[p.categorie]||p.categorie||'—')+' · '+(p.pret||0)+' лей</div></div>'
           + '<div><button class="edit" onclick="editProduct(window._prodList['+i+'])">Изменить</button>'
           + '<button class="del" onclick="delProduct('+p.id+')">Удалить</button></div></div>';
       }).join('');
-    }catch(e){ box.innerHTML='<p class="msg err">Не удалось загрузить список.</p>'; console.error(e); }
+    }catch(e){ box.innerHTML='<p class="msg err">Не удалось загрузить список: '+e.message+'</p>'; console.error(e); }
   }
 
   async function delProduct(id){
