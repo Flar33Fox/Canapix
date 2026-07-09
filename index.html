@@ -253,15 +253,16 @@
   @media(max-width:820px){ .co-grid{grid-template-columns:1fr} .step-line{width:44px} }
 
   /* ---------- product page ---------- */
-  .prod-page{position:fixed;inset:0;background:var(--bg);z-index:85;overflow-y:auto;display:none}
+  .prod-page{display:none;background:var(--bg);padding-top:20px}
   .prod-page.open{display:block}
-  .pp-wrap{max-width:1080px;margin:0 auto;padding:22px 22px 60px}
+  body.pp-open main,body.pp-open .story{display:none}
+  .pp-wrap{max-width:1080px;margin:0 auto;padding:22px 22px 60px;position:relative;z-index:1}
   .pp-crumbs{color:var(--ink-soft);font-size:.88rem;margin-bottom:18px}
   .pp-crumbs a{color:var(--ink-soft);text-decoration:none;cursor:pointer}
   .pp-crumbs a:hover{color:var(--plum-deep)}
-  .pp-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:start}
+  .pp-grid{display:grid;grid-template-columns:minmax(0,440px) 1fr;gap:44px;align-items:start;max-width:940px;margin:0 auto}
   .pp-gallery{display:flex;flex-direction:column;gap:12px}
-  .pp-hero{aspect-ratio:1;border-radius:22px;overflow:hidden;background:var(--blush);display:grid;place-items:center}
+  .pp-hero{aspect-ratio:1;border-radius:20px;overflow:hidden;background:var(--blush);display:grid;place-items:center;max-height:440px}
   .pp-hero img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
   .pp-hero svg{width:55%;height:55%}
   .pp-thumbs{display:flex;gap:10px;flex-wrap:wrap}
@@ -270,18 +271,23 @@
   .pp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
   .pp-info h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.7rem,3vw,2.3rem);letter-spacing:-.01em;margin-bottom:6px}
   .pp-cat{color:var(--sage-deep);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
-  .pp-price{font-family:'Fraunces',serif;font-weight:500;font-size:2rem;color:var(--plum-deep);margin:8px 0 22px}
-  .pp-desc{color:var(--ink);font-size:1rem;line-height:1.7;margin-bottom:26px;white-space:pre-wrap}
-  .pp-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+  .pp-price{font-family:'Fraunces',serif;font-weight:500;font-size:1.75rem;color:var(--plum-deep);margin:4px 0 18px}
+  .pp-desc{color:var(--ink);font-size:.98rem;line-height:1.65;margin:0;white-space:pre-wrap}
+  .pp-actions{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px}
   .pp-add{background:var(--plum);color:#fff;border:none;padding:14px 30px;border-radius:99px;font-family:'Karla';font-weight:700;font-size:1rem;cursor:pointer;
     box-shadow:0 10px 24px -10px rgba(155,123,163,.7);transition:transform .15s}
   .pp-add:hover{transform:translateY(-2px)}
-  .pp-details{border-top:1px solid var(--line);padding-top:20px;color:var(--ink-soft);font-size:.92rem;line-height:1.7}
+  .pp-details{border-top:1px solid var(--line);padding-top:16px;color:var(--ink-soft);font-size:.9rem;line-height:1.65}
+  .pp-details p{margin-bottom:6px}
   .pp-details b{color:var(--ink);font-weight:700}
   .pp-related{margin-top:60px}
   .pp-related h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.5rem;margin-bottom:20px}
   .pp-related .grid{padding-bottom:0}
-  @media(max-width:820px){ .pp-grid{grid-template-columns:1fr;gap:22px} }
+  .pp-desc-block{max-width:800px;margin:44px auto 0;padding-top:30px;border-top:1px solid var(--line)}
+  .pp-desc-block h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.35rem;margin-bottom:14px;letter-spacing:-.01em}
+  .pp-desc-block .pp-desc{color:var(--ink);font-size:1rem;line-height:1.75;white-space:pre-wrap}
+  .pp-empty-desc{color:var(--ink-soft);font-style:italic}
+  @media(max-width:820px){ .pp-grid{grid-template-columns:1fr;gap:22px} .pp-hero{max-height:none} }
 
   /* ---------- home story blocks ---------- */
   .story{padding:20px 0 60px}
@@ -296,11 +302,11 @@
   .story p{color:var(--ink-soft);font-size:1.03rem;line-height:1.7;margin-bottom:12px}
   @media(max-width:820px){ .story-row,.story-row.reverse{grid-template-columns:1fr;direction:ltr} }
 
-  .back-top{position:fixed;bottom:26px;right:22px;width:44px;height:44px;border-radius:50%;background:var(--surface);
-    border:1px solid var(--line);color:var(--ink);cursor:pointer;font-size:1.2rem;box-shadow:var(--shadow);
-    display:none;place-items:center;z-index:40;transition:transform .15s}
+  .back-top{position:fixed;bottom:32px;right:28px;width:56px;height:56px;border-radius:50%;background:var(--plum);
+    border:none;color:#fff;cursor:pointer;font-size:1.6rem;box-shadow:0 12px 28px -8px rgba(155,123,163,.6);
+    display:none;place-items:center;z-index:40;transition:transform .18s,box-shadow .18s;font-family:'Karla';line-height:1}
   .back-top.show{display:grid}
-  .back-top:hover{transform:translateY(-3px)}
+  .back-top:hover{transform:translateY(-4px);box-shadow:0 16px 34px -8px rgba(155,123,163,.75)}
 
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
     background:var(--ink);color:var(--surface);padding:13px 22px;border-radius:99px;font-weight:600;
@@ -420,6 +426,45 @@
     </div>
   </div>
 </section>
+<!-- PRODUCT PAGE -->
+<div class="prod-page" id="prodPage">
+  <div class="pp-wrap">
+    <div class="pp-crumbs">
+      <a onclick="closeProduct()" data-i18n="pp_home">Acasă</a> ›
+      <a onclick="closeProduct();filterByCat(prodCurrent && prodCurrent.c)" id="ppCatLink">—</a> ›
+      <span id="ppName">—</span>
+    </div>
+    <div class="pp-grid">
+      <div class="pp-gallery">
+        <div class="pp-hero" id="ppHero"></div>
+        <div class="pp-thumbs" id="ppThumbs"></div>
+      </div>
+      <div class="pp-info">
+        <div class="pp-cat" id="ppCat"></div>
+        <h1 id="ppTitle"></h1>
+        <div class="pp-price" id="ppPrice"></div>
+        <div class="pp-actions">
+          <button class="pp-add" onclick="ppAdd()" data-i18n="pp_add">Adaugă în coş</button>
+        </div>
+        <div class="pp-details">
+          <p><b data-i18n="pp_delivery">Livrare:</b> <span data-i18n="pp_delivery_v">Chişinău — gratuit peste 300 lei. În Moldova — 1–3 zile.</span></p>
+          <p><b data-i18n="pp_returns">Retur:</b> <span data-i18n="pp_returns_v">14 zile pentru retur, dacă produsul e nefolosit.</span></p>
+          <p><b data-i18n="pp_pack">Împachetat:</b> <span data-i18n="pp_pack_v">Fiecare comandă vine împachetată cadou.</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="pp-desc-block" id="ppDescBlock" style="display:none">
+      <h3 data-i18n="pp_description">Descriere</h3>
+      <p class="pp-desc" id="ppDesc"></p>
+    </div>
+
+    <div class="pp-related" id="ppRelated" style="display:none">
+      <h3 data-i18n="pp_related">Poate îţi place</h3>
+      <div class="grid" id="ppRelatedGrid"></div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>
@@ -541,42 +586,7 @@
   </div>
 </div>
 
-<!-- PRODUCT PAGE -->
-<div class="prod-page" id="prodPage">
-  <div class="pp-wrap">
-    <div class="pp-crumbs">
-      <a onclick="closeProduct()" data-i18n="pp_home">Acasă</a> ›
-      <a onclick="closeProduct();filterByCat(prodCurrent && prodCurrent.c)" id="ppCatLink">—</a> ›
-      <span id="ppName">—</span>
-    </div>
-    <div class="pp-grid">
-      <div class="pp-gallery">
-        <div class="pp-hero" id="ppHero"></div>
-        <div class="pp-thumbs" id="ppThumbs"></div>
-      </div>
-      <div class="pp-info">
-        <div class="pp-cat" id="ppCat"></div>
-        <h1 id="ppTitle"></h1>
-        <div class="pp-price" id="ppPrice"></div>
-        <p class="pp-desc" id="ppDesc"></p>
-        <div class="pp-actions">
-          <button class="pp-add" onclick="ppAdd()" data-i18n="pp_add">Adaugă în coş</button>
-        </div>
-        <div class="pp-details">
-          <p><b data-i18n="pp_delivery">Livrare:</b> <span data-i18n="pp_delivery_v">Chişinău — gratuit peste 300 lei. În Moldova — 1–3 zile.</span></p>
-          <p><b data-i18n="pp_returns">Retur:</b> <span data-i18n="pp_returns_v">14 zile pentru retur, dacă produsul e nefolosit.</span></p>
-          <p><b data-i18n="pp_pack">Împachetat:</b> <span data-i18n="pp_pack_v">Fiecare comandă vine împachetată cadou.</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="pp-related" id="ppRelated" style="display:none">
-      <h3 data-i18n="pp_related">Poate îţi place</h3>
-      <div class="grid" id="ppRelatedGrid"></div>
-    </div>
-  </div>
-</div>
-
-<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">↑</button>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top" title="Наверх">⬆</button>
 
 <!-- INFO MODAL -->
 <div class="info-overlay" id="infoOverlay">
@@ -611,7 +621,7 @@
       tag_nou:'Nou', tag_popular:'Popular', opt_delivery:'Livrare (plata la primire)', opt_pickup:'Ridicare personală', l_telefon:'Telefon', pickup_note:'Te așteptăm la: Chișinău, str. Exemplu 1. Îți confirmăm ora pe telefon.', m_city:'Adaugă orașul pentru livrare.',
       m_added:'adăugat în coș 🌷', m_cart_empty:'Coșul e gol 🌸', m_fill:'Completează prenume, nume și email.',
       m_keys:'Adaugă întâi cheile Supabase în cod.', m_sending:'Se trimite...', m_created:'Comandă trimisă! Îți mulțumim 🌷',
-      m_save_err:'Eroare la salvare. Verifică Supabase.', m_net_err:'Eroare de rețea. Încearcă din nou.', no_products:'Încă nu sunt produse. Adaugă din panoul de admin.', pp_home:'Acasă', pp_add:'Adaugă în coș', pp_delivery:'Livrare:', pp_delivery_v:'Chișinău — gratuit peste 300 lei. În Moldova — 1–3 zile.', pp_returns:'Retur:', pp_returns_v:'14 zile pentru retur, dacă produsul e nefolosit.', pp_pack:'Împachetat:', pp_pack_v:'Fiecare comandă vine împachetată cadou.', pp_related:'Poate îți place', story1_eye:'Povestea noastră', story1_t:'Alese pe îndelete, ca să-ți placă mereu.', story1_p1:'Fiecare piesă din colecție e trecută prin mâinile noastre înainte să ajungă pe site. Încercăm închizătorile, verificăm culorile la lumina naturală, și ținem doar ce ne-am pune singure.', story1_p2:'Așa cataloagele noastre nu au sute de produse la nesfârșit, dar fiecare merită atenția ta.', story2_eye:'Împachetat cu grijă', story2_t:'Fiecare comandă, gata de dăruit.', story2_p1:'Nu contează dacă e pentru tine sau pentru cineva drag — fiecare piesă ajunge împachetată în hârtie fină, cu o panglică și un cartonaș pe care poate fi scris mesajul tău.', story2_p2:'Micile detalii contează. La noi, ele sunt incluse.', opt_courier:'Livrare prin curier', co_back:'← înapoi la magazin', co_cart:'Coșul de cumpărături', co_method:'Metoda de livrare', co_city:'Orașul livrării', co_city_ph:'Alege orașul', co_date:'Data', co_time:'Ora', time_op:'Stabiliți cu operatorul', co_msg:'Mesaj pe felicitare', co_msg_ph:'Câteva cuvinte care vor fi printate pe felicitare', co_subtotal:'Subtotal', co_promo:'Ai un cod promoțional?', co_total:'TOTAL', co_continue:'Continuă', co_contact:'Datele tale', l_adresa:'Adresă (stradă, nr.)', co_back_btn:'Înapoi', co_done_t:'Comandă trimisă!', co_done_p:'Îți mulțumim! Te contactăm în curând pentru confirmare.', co_back_shop:'Înapoi la magazin', co_empty:'Coșul e gol.' },
+      m_save_err:'Eroare la salvare. Verifică Supabase.', m_net_err:'Eroare de rețea. Încearcă din nou.', no_products:'Încă nu sunt produse. Adaugă din panoul de admin.', pp_home:'Acasă', pp_description:'Descriere', pp_add:'Adaugă în coș', pp_delivery:'Livrare:', pp_delivery_v:'Chișinău — gratuit peste 300 lei. În Moldova — 1–3 zile.', pp_returns:'Retur:', pp_returns_v:'14 zile pentru retur, dacă produsul e nefolosit.', pp_pack:'Împachetat:', pp_pack_v:'Fiecare comandă vine împachetată cadou.', pp_related:'Poate îți place', story1_eye:'Povestea noastră', story1_t:'Alese pe îndelete, ca să-ți placă mereu.', story1_p1:'Fiecare piesă din colecție e trecută prin mâinile noastre înainte să ajungă pe site. Încercăm închizătorile, verificăm culorile la lumina naturală, și ținem doar ce ne-am pune singure.', story1_p2:'Așa cataloagele noastre nu au sute de produse la nesfârșit, dar fiecare merită atenția ta.', story2_eye:'Împachetat cu grijă', story2_t:'Fiecare comandă, gata de dăruit.', story2_p1:'Nu contează dacă e pentru tine sau pentru cineva drag — fiecare piesă ajunge împachetată în hârtie fină, cu o panglică și un cartonaș pe care poate fi scris mesajul tău.', story2_p2:'Micile detalii contează. La noi, ele sunt incluse.', opt_courier:'Livrare prin curier', co_back:'← înapoi la magazin', co_cart:'Coșul de cumpărături', co_method:'Metoda de livrare', co_city:'Orașul livrării', co_city_ph:'Alege orașul', co_date:'Data', co_time:'Ora', time_op:'Stabiliți cu operatorul', co_msg:'Mesaj pe felicitare', co_msg_ph:'Câteva cuvinte care vor fi printate pe felicitare', co_subtotal:'Subtotal', co_promo:'Ai un cod promoțional?', co_total:'TOTAL', co_continue:'Continuă', co_contact:'Datele tale', l_adresa:'Adresă (stradă, nr.)', co_back_btn:'Înapoi', co_done_t:'Comandă trimisă!', co_done_p:'Îți mulțumim! Te contactăm în curând pentru confirmare.', co_back_shop:'Înapoi la magazin', co_empty:'Coșul e gol.' },
     ru:{ nav_shop:'Магазин', nav_why:'Почему Canapix', nav_gifts:'Подарки', nav_contact:'Контакты', account:'Аккаунт',
       hero_eyebrow:'Аксессуары и маленькие подарки', hero_title:'Мелочи, которые <em>меняют</em> весь день.',
       hero_p:'Серьги, заколки, браслеты и аккуратно упакованные подарки — выбраны с любовью, готовы дарить.',
@@ -630,7 +640,7 @@
       tag_nou:'Новинка', tag_popular:'Хит', opt_delivery:'Доставка (оплата при получении)', opt_pickup:'Самовывоз', l_telefon:'Телефон', pickup_note:'Ждём тебя: Кишинёв, ул. Пример 1. Время подтвердим по телефону.', m_city:'Укажи город для доставки.',
       m_added:'добавлено в корзину 🌷', m_cart_empty:'Корзина пуста 🌸', m_fill:'Заполни имя, фамилию и почту.',
       m_keys:'Сначала добавь ключи Supabase в код.', m_sending:'Отправка...', m_created:'Заказ отправлен! Спасибо 🌷',
-      m_save_err:'Ошибка сохранения. Проверь Supabase.', m_net_err:'Ошибка сети. Попробуй снова.', no_products:'Товаров пока нет. Добавь их в админ-панели.', pp_home:'Главная', pp_add:'В корзину', pp_delivery:'Доставка:', pp_delivery_v:'Кишинёв — бесплатно от 300 лей. По Молдове — 1–3 дня.', pp_returns:'Возврат:', pp_returns_v:'14 дней на возврат, если товар не использовался.', pp_pack:'Упаковка:', pp_pack_v:'Каждый заказ приходит упакованным как подарок.', pp_related:'Возможно понравится', story1_eye:'Наша история', story1_t:'Выбрано с любовью — чтобы носилось долго.', story1_p1:'Каждая вещь из коллекции проходит через наши руки прежде, чем попасть на сайт. Пробуем застёжки, проверяем цвет при дневном свете, оставляем только то, что сами бы носили.', story1_p2:'Поэтому в каталоге не бесконечные сотни позиций — но каждая заслуживает внимания.', story2_eye:'Упаковано с заботой', story2_t:'Каждый заказ — готовый подарок.', story2_p1:'Не важно, себе или в подарок — каждая вещь приходит в тонкой бумаге, с лентой и открыткой, куда можно написать твоё сообщение.', story2_p2:'Мелочи имеют значение. У нас они включены.', opt_courier:'Доставка курьером', co_back:'← назад в магазин', co_cart:'Корзина', co_method:'Способ получения', co_city:'Город доставки', co_city_ph:'Выберите город', co_date:'Дата', co_time:'Время', time_op:'Уточнить с оператором', co_msg:'Сообщение на открытке', co_msg_ph:'Пару слов, которые напечатаем на открытке', co_subtotal:'Подытог', co_promo:'Есть промокод?', co_total:'ИТОГО', co_continue:'Продолжить', co_contact:'Твои данные', l_adresa:'Адрес (улица, дом)', co_back_btn:'Назад', co_done_t:'Заказ отправлен!', co_done_p:'Спасибо! Мы скоро свяжемся для подтверждения.', co_back_shop:'Вернуться в магазин', co_empty:'Корзина пуста.' },
+      m_save_err:'Ошибка сохранения. Проверь Supabase.', m_net_err:'Ошибка сети. Попробуй снова.', no_products:'Товаров пока нет. Добавь их в админ-панели.', pp_home:'Главная', pp_description:'Описание', pp_add:'В корзину', pp_delivery:'Доставка:', pp_delivery_v:'Кишинёв — бесплатно от 300 лей. По Молдове — 1–3 дня.', pp_returns:'Возврат:', pp_returns_v:'14 дней на возврат, если товар не использовался.', pp_pack:'Упаковка:', pp_pack_v:'Каждый заказ приходит упакованным как подарок.', pp_related:'Возможно понравится', story1_eye:'Наша история', story1_t:'Выбрано с любовью — чтобы носилось долго.', story1_p1:'Каждая вещь из коллекции проходит через наши руки прежде, чем попасть на сайт. Пробуем застёжки, проверяем цвет при дневном свете, оставляем только то, что сами бы носили.', story1_p2:'Поэтому в каталоге не бесконечные сотни позиций — но каждая заслуживает внимания.', story2_eye:'Упаковано с заботой', story2_t:'Каждый заказ — готовый подарок.', story2_p1:'Не важно, себе или в подарок — каждая вещь приходит в тонкой бумаге, с лентой и открыткой, куда можно написать твоё сообщение.', story2_p2:'Мелочи имеют значение. У нас они включены.', opt_courier:'Доставка курьером', co_back:'← назад в магазин', co_cart:'Корзина', co_method:'Способ получения', co_city:'Город доставки', co_city_ph:'Выберите город', co_date:'Дата', co_time:'Время', time_op:'Уточнить с оператором', co_msg:'Сообщение на открытке', co_msg_ph:'Пару слов, которые напечатаем на открытке', co_subtotal:'Подытог', co_promo:'Есть промокод?', co_total:'ИТОГО', co_continue:'Продолжить', co_contact:'Твои данные', l_adresa:'Адрес (улица, дом)', co_back_btn:'Назад', co_done_t:'Заказ отправлен!', co_done_p:'Спасибо! Мы скоро свяжемся для подтверждения.', co_back_shop:'Вернуться в магазин', co_empty:'Корзина пуста.' },
     en:{ nav_shop:'Shop', nav_why:'Why Canapix', nav_gifts:'Gifts', nav_contact:'Contact', account:'Account',
       hero_eyebrow:'Accessories & little gifts', hero_title:'Small details that <em>change</em> the whole day.',
       hero_p:'Earrings, clips, bracelets and carefully wrapped gifts — hand-picked and ready to give.',
@@ -649,7 +659,7 @@
       tag_nou:'New', tag_popular:'Popular', opt_delivery:'Delivery (pay on arrival)', opt_pickup:'Pickup', l_telefon:'Phone', pickup_note:'Come to: Chișinău, Exemplu St. 1. We will confirm the time by phone.', m_city:'Add your city for delivery.',
       m_added:'added to cart 🌷', m_cart_empty:'Cart is empty 🌸', m_fill:'Fill in first name, last name and email.',
       m_keys:'Add your Supabase keys in the code first.', m_sending:'Sending...', m_created:'Order placed! Thank you 🌷',
-      m_save_err:'Save error. Check Supabase.', m_net_err:'Network error. Try again.', no_products:'No products yet. Add them from the admin panel.', pp_home:'Home', pp_add:'Add to cart', pp_delivery:'Delivery:', pp_delivery_v:'Chișinău — free over 300 lei. In Moldova — 1–3 days.', pp_returns:'Returns:', pp_returns_v:'14 days for returns if the item is unused.', pp_pack:'Packaging:', pp_pack_v:'Every order arrives gift-wrapped.', pp_related:'You might like', story1_eye:'Our story', story1_t:'Chosen with care, so you keep wearing them.', story1_p1:'Every piece in the collection passes through our own hands before it reaches the site. We try the clasps, check colors in daylight, and keep only what we would wear ourselves.', story1_p2:'That is why our catalog is not endless — but every piece earns its place.', story2_eye:'Wrapped with care', story2_t:'Every order is a ready gift.', story2_p1:'Whether it is for you or for someone dear — every piece comes in fine paper, with a ribbon and a small card for your personal message.', story2_p2:'Small details matter. At Canapix, they come included.', opt_courier:'Courier delivery', co_back:'← back to shop', co_cart:'Shopping cart', co_method:'Delivery method', co_city:'Delivery city', co_city_ph:'Choose the city', co_date:'Date', co_time:'Time', time_op:'Confirm with operator', co_msg:'Card message', co_msg_ph:'A few words to print on the card', co_subtotal:'Subtotal', co_promo:'Have a promo code?', co_total:'TOTAL', co_continue:'Continue', co_contact:'Your details', l_adresa:'Address (street, no.)', co_back_btn:'Back', co_done_t:'Order placed!', co_done_p:'Thank you! We will contact you soon to confirm.', co_back_shop:'Back to shop', co_empty:'Cart is empty.' }
+      m_save_err:'Save error. Check Supabase.', m_net_err:'Network error. Try again.', no_products:'No products yet. Add them from the admin panel.', pp_home:'Home', pp_description:'Description', pp_add:'Add to cart', pp_delivery:'Delivery:', pp_delivery_v:'Chișinău — free over 300 lei. In Moldova — 1–3 days.', pp_returns:'Returns:', pp_returns_v:'14 days for returns if the item is unused.', pp_pack:'Packaging:', pp_pack_v:'Every order arrives gift-wrapped.', pp_related:'You might like', story1_eye:'Our story', story1_t:'Chosen with care, so you keep wearing them.', story1_p1:'Every piece in the collection passes through our own hands before it reaches the site. We try the clasps, check colors in daylight, and keep only what we would wear ourselves.', story1_p2:'That is why our catalog is not endless — but every piece earns its place.', story2_eye:'Wrapped with care', story2_t:'Every order is a ready gift.', story2_p1:'Whether it is for you or for someone dear — every piece comes in fine paper, with a ribbon and a small card for your personal message.', story2_p2:'Small details matter. At Canapix, they come included.', opt_courier:'Courier delivery', co_back:'← back to shop', co_cart:'Shopping cart', co_method:'Delivery method', co_city:'Delivery city', co_city_ph:'Choose the city', co_date:'Date', co_time:'Time', time_op:'Confirm with operator', co_msg:'Card message', co_msg_ph:'A few words to print on the card', co_subtotal:'Subtotal', co_promo:'Have a promo code?', co_total:'TOTAL', co_continue:'Continue', co_contact:'Your details', l_adresa:'Address (street, no.)', co_back_btn:'Back', co_done_t:'Order placed!', co_done_p:'Thank you! We will contact you soon to confirm.', co_back_shop:'Back to shop', co_empty:'Cart is empty.' }
   };
 
   /* ---------- SVG produse ---------- */
@@ -994,7 +1004,9 @@
     $('ppCat').textContent = T[lang]['cat_'+p.c] || p.c;
     $('ppCatLink').textContent = T[lang]['cat_'+p.c] || p.c;
     $('ppPrice').textContent = p.price + ' lei';
-    $('ppDesc').textContent = (p.desc && p.desc[lang]) || '';
+    const descText = (p.desc && p.desc[lang]) || '';
+    $('ppDesc').textContent = descText;
+    $('ppDescBlock').style.display = descText ? 'block' : 'none';
     const imgs = p.images && p.images.length ? p.images : (p.image_url ? [p.image_url] : []);
     const hero = $('ppHero');
     if(imgs.length){ hero.innerHTML = '<img src="'+imgs[0]+'" alt="">'; }
@@ -1017,6 +1029,7 @@
           + '<button class="add" onclick="event.stopPropagation();add(\''+x.id+'\')">+</button></div></div></article>';
       }).join('');
     } else { $('ppRelated').style.display = 'none'; }
+    document.body.classList.add('pp-open');
     $('prodPage').classList.add('open'); window.scrollTo(0,0);
   }
   function ppSetImg(i, el){
@@ -1025,7 +1038,7 @@
     document.querySelectorAll('.pp-thumb').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
   }
-  function closeProduct(){ $('prodPage').classList.remove('open'); prodCurrent = null; }
+  function closeProduct(){ $('prodPage').classList.remove('open'); document.body.classList.remove('pp-open'); prodCurrent = null; }
   function ppAdd(){ if(prodCurrent){ add(prodCurrent.id); } }
   function filterByCat(cat){
     if(!cat) return;
