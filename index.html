@@ -268,9 +268,10 @@
   .info-close:hover{background:var(--blush)}
 
   /* ---------- product page ---------- */
-  .prod-page{display:none;background:var(--bg);padding-top:20px}
+  .prod-page{display:none;background:var(--bg);padding-top:20px;position:relative;z-index:2}
   .prod-page.open{display:block}
-  body.pp-open main,body.pp-open .story{display:none}
+  body.pp-open main > section:not(.prod-page-wrapper),body.pp-open main > .story{display:none}
+  body.pp-open .promise,body.pp-open .cats,body.pp-open .sec-head,body.pp-open .grid,body.pp-open .hero{display:none}
   .pp-wrap{max-width:1080px;margin:0 auto;padding:22px 22px 60px;position:relative;z-index:1}
   .pp-crumbs{color:var(--ink-soft);font-size:.88rem;margin-bottom:18px}
   .pp-crumbs a{color:var(--ink-soft);text-decoration:none;cursor:pointer}
