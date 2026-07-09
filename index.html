@@ -347,12 +347,12 @@
 
 <header>
   <div class="wrap nav">
-    <a href="#" class="logo"><span class="dot"></span>Canapix</a>
+    <a href="#" class="logo" onclick="navGo('top');return false"><span class="dot"></span>Canapix</a>
     <ul class="nav-links">
-      <li><a href="#shop" data-i18n="nav_shop">Magazin</a></li>
-      <li><a href="#promise" data-i18n="nav_why">De ce Canapix</a></li>
-      <li><a href="#" data-i18n="nav_gifts">Cadouri</a></li>
-      <li><a href="#" data-i18n="nav_contact">Contact</a></li>
+      <li><a href="#shop" onclick="navGo('shop');return false" data-i18n="nav_shop">Magazin</a></li>
+      <li><a href="#promise" onclick="navGo('promise');return false" data-i18n="nav_why">De ce Canapix</a></li>
+      <li><a href="#" onclick="navGo('gifts');return false" data-i18n="nav_gifts">Cadouri</a></li>
+      <li><a href="#" onclick="openInfo('contact');closeProduct();return false" data-i18n="nav_contact">Contact</a></li>
     </ul>
     <div class="controls">
       <div class="lang" role="group" aria-label="Language">
@@ -486,7 +486,7 @@
 <footer>
   <div class="wrap foot">
     <div>
-      <a href="#" class="logo"><span class="dot"></span>Canapix</a>
+      <a href="#" class="logo" onclick="navGo('top');return false"><span class="dot"></span>Canapix</a>
       <p data-i18n="foot_tagline">Accesorii mici și cadouri împachetate cu grijă, din Chișinău.</p>
     </div>
     <div class="foot-cols">
@@ -1055,6 +1055,19 @@
     el.classList.add('active');
   }
   function closeProduct(){ $('prodPage').classList.remove('open'); document.body.classList.remove('pp-open'); prodCurrent = null; }
+
+  function navGo(where){
+    closeProduct();
+    if(where === 'gifts'){
+      // filter to "Cadouri gata" category
+      const chip = Array.from(document.querySelectorAll('.chip')).find(c => c.getAttribute('data-i18n') === 'cat_cadou');
+      if(chip){ document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); render('cadou'); }
+      setTimeout(() => { const el = document.getElementById('shop'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 60);
+      return;
+    }
+    if(where === 'top'){ setTimeout(() => window.scrollTo({top:0,behavior:'smooth'}), 60); return; }
+    setTimeout(() => { const el = document.getElementById(where); if(el) el.scrollIntoView({behavior:'smooth'}); }, 60);
+  }
   function ppAdd(){ if(prodCurrent){ add(prodCurrent.id); } }
   function filterByCat(cat){
     if(!cat) return;
