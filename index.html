@@ -98,10 +98,12 @@
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding-bottom:70px}
   .card{background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);
     display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+  .card{cursor:pointer}
   .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-  .card .thumb{aspect-ratio:1;display:grid;place-items:center;position:relative}
+  .card .thumb{aspect-ratio:1;display:grid;place-items:center;position:relative;overflow:hidden}
   .card .thumb svg{width:58%;height:58%}
-  .thumb-img{width:100%;height:100%;object-fit:cover}
+  .thumb-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .4s}
+  .card:hover .thumb-img{transform:scale(1.06)}
   .ci-thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px}
   .tag{position:absolute;top:12px;left:12px;background:rgba(255,253,251,.92);color:var(--plum-deep);
     font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:99px}
@@ -343,6 +345,31 @@
       <p data-i18n="promise3_d">Aducem cantități mici, așa că rareori o să vezi pe altcineva cu aceeași piesă.</p>
     </div>
   </section>
+
+<section class="story wrap">
+  <div class="story-row">
+    <div>
+      <div class="story-eyebrow" data-i18n="story1_eye">Povestea noastră</div>
+      <h2 data-i18n="story1_t">Alese pe îndelete, ca să-ţi placă mereu.</h2>
+      <p data-i18n="story1_p1">Fiecare piesă din colecţie e trecută prin mâinile noastre înainte să ajungă pe site. Încercăm închizătorile, verificăm culorile la lumina naturală, şi ţinem doar ce ne-am pune singure.</p>
+      <p data-i18n="story1_p2">Aşa cataloagele noastre nu au sute de produse la nesfârşit, dar fiecare merită atenţia ta.</p>
+    </div>
+    <div class="story-art">
+      <svg viewBox="0 0 100 100" fill="none"><g stroke="#836691" stroke-width="2.5"><circle cx="50" cy="50" r="28" fill="#FFFDFB"/><circle cx="50" cy="50" r="18" fill="#F4D9D6"/><circle cx="50" cy="34" r="4" fill="#9B7BA3" stroke="none"/></g></svg>
+    </div>
+  </div>
+  <div class="story-row reverse">
+    <div>
+      <div class="story-eyebrow" data-i18n="story2_eye">Împachetat cu grijă</div>
+      <h2 data-i18n="story2_t">Fiecare comandă, gata de dăruit.</h2>
+      <p data-i18n="story2_p1">Nu contează dacă e pentru tine sau pentru cineva drag — fiecare piesă ajunge împachetată în hârtie fină, cu o panglică şi un cartonaş pe care poate fi scris mesajul tău.</p>
+      <p data-i18n="story2_p2">Micile detalii contează. La noi, ele sunt incluse.</p>
+    </div>
+    <div class="story-art b">
+      <svg viewBox="0 0 100 100" fill="none"><g stroke="#4A3F46" stroke-width="2.5"><rect x="22" y="34" width="56" height="46" rx="4" fill="#FFFDFB"/><path d="M22 50 L78 50" /><path d="M50 34 L50 80"/><path d="M35 34 Q50 12 65 34" fill="#B7A2CC"/></g></svg>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -361,9 +388,12 @@
       </div>
       <div class="foot-col">
         <h5 data-i18n="foot_help">Ajutor</h5>
-        <a href="#" data-i18n="foot_delivery">Livrare</a>
-        <a href="#" data-i18n="foot_returns">Retur</a>
-        <a href="#" data-i18n="foot_contact">Contact</a>
+        <a href="#" onclick="openInfo('about');return false" data-i18n="foot_about">Despre noi</a>
+        <a href="blog.html" data-i18n="foot_blog">Blog</a>
+        <a href="#" onclick="openInfo('delivery');return false" data-i18n="foot_delivery">Livrare</a>
+        <a href="#" onclick="openInfo('returns');return false" data-i18n="foot_returns">Retur</a>
+        <a href="#" onclick="openInfo('faq');return false" data-i18n="foot_faq">FAQ</a>
+        <a href="#" onclick="openInfo('contact');return false" data-i18n="foot_contact">Contact</a>
       </div>
       <div class="foot-col">
         <h5 data-i18n="foot_write">Scrie-ne</h5>
@@ -461,6 +491,53 @@
   </div>
 </div>
 
+<!-- PRODUCT PAGE -->
+<div class="prod-page" id="prodPage">
+  <div class="pp-wrap">
+    <div class="pp-crumbs">
+      <a onclick="closeProduct()" data-i18n="pp_home">Acasă</a> ›
+      <a onclick="closeProduct();filterByCat(prodCurrent && prodCurrent.c)" id="ppCatLink">—</a> ›
+      <span id="ppName">—</span>
+    </div>
+    <div class="pp-grid">
+      <div class="pp-gallery">
+        <div class="pp-hero" id="ppHero"></div>
+        <div class="pp-thumbs" id="ppThumbs"></div>
+      </div>
+      <div class="pp-info">
+        <div class="pp-cat" id="ppCat"></div>
+        <h1 id="ppTitle"></h1>
+        <div class="pp-price" id="ppPrice"></div>
+        <p class="pp-desc" id="ppDesc"></p>
+        <div class="pp-actions">
+          <button class="pp-add" onclick="ppAdd()" data-i18n="pp_add">Adaugă în coş</button>
+        </div>
+        <div class="pp-details">
+          <p><b data-i18n="pp_delivery">Livrare:</b> <span data-i18n="pp_delivery_v">Chişinău — gratuit peste 300 lei. În Moldova — 1–3 zile.</span></p>
+          <p><b data-i18n="pp_returns">Retur:</b> <span data-i18n="pp_returns_v">14 zile pentru retur, dacă produsul e nefolosit.</span></p>
+          <p><b data-i18n="pp_pack">Împachetat:</b> <span data-i18n="pp_pack_v">Fiecare comandă vine împachetată cadou.</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="pp-related" id="ppRelated" style="display:none">
+      <h3 data-i18n="pp_related">Poate îţi place</h3>
+      <div class="grid" id="ppRelatedGrid"></div>
+    </div>
+  </div>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">↑</button>
+
+<!-- INFO MODAL -->
+<div class="info-overlay" id="infoOverlay">
+  <div class="info-modal" role="dialog" aria-modal="true">
+    <button class="info-close" onclick="closeInfo()" aria-label="x">×</button>
+    <div class="info-eyebrow" id="infoEye">Canapix</div>
+    <h2 id="infoTitle"></h2>
+    <div id="infoBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -476,7 +553,7 @@
       promise2_t:'Livrare în Chișinău', promise2_d:'Comanzi azi, ajunge mâine. În oraș, livrare gratuită de la 300 lei.',
       promise3_t:'Piese în ediție mică', promise3_d:'Aducem cantități mici, așa că rareori o să vezi pe altcineva cu aceeași piesă.',
       foot_tagline:'Accesorii mici și cadouri împachetate cu grijă, din Chișinău.',
-      foot_shop:'Magazin', foot_help:'Ajutor', foot_write:'Scrie-ne', foot_delivery:'Livrare', foot_returns:'Retur', foot_contact:'Contact',
+      foot_shop:'Magazin', foot_help:'Ajutor', foot_write:'Scrie-ne', foot_about:'Despre noi', foot_blog:'Blog', foot_delivery:'Livrare', foot_returns:'Retur', foot_faq:'FAQ', foot_contact:'Contact',
       cart_title:'Coșul tău', cart_empty:'Coșul tău e gol', cart_empty_sub:'Adaugă câteva accesorii ca să apară aici.',
       cart_total:'Total', cart_checkout:'Finalizează comanda',
       form_title:'Finalizează comanda', form_sub:'Completează datele de livrare ca să-ți trimitem comanda.',
@@ -484,7 +561,7 @@
       tag_nou:'Nou', tag_popular:'Popular', opt_delivery:'Livrare (plata la primire)', opt_pickup:'Ridicare personală', l_telefon:'Telefon', pickup_note:'Te așteptăm la: Chișinău, str. Exemplu 1. Îți confirmăm ora pe telefon.', m_city:'Adaugă orașul pentru livrare.',
       m_added:'adăugat în coș 🌷', m_cart_empty:'Coșul e gol 🌸', m_fill:'Completează prenume, nume și email.',
       m_keys:'Adaugă întâi cheile Supabase în cod.', m_sending:'Se trimite...', m_created:'Comandă trimisă! Îți mulțumim 🌷',
-      m_save_err:'Eroare la salvare. Verifică Supabase.', m_net_err:'Eroare de rețea. Încearcă din nou.', no_products:'Încă nu sunt produse. Adaugă din panoul de admin.', opt_courier:'Livrare prin curier', co_back:'← înapoi la magazin', co_cart:'Coșul de cumpărături', co_method:'Metoda de livrare', co_city:'Orașul livrării', co_city_ph:'Alege orașul', co_date:'Data', co_time:'Ora', time_op:'Stabiliți cu operatorul', co_msg:'Mesaj pe felicitare', co_msg_ph:'Câteva cuvinte care vor fi printate pe felicitare', co_subtotal:'Subtotal', co_promo:'Ai un cod promoțional?', co_total:'TOTAL', co_continue:'Continuă', co_contact:'Datele tale', l_adresa:'Adresă (stradă, nr.)', co_back_btn:'Înapoi', co_done_t:'Comandă trimisă!', co_done_p:'Îți mulțumim! Te contactăm în curând pentru confirmare.', co_back_shop:'Înapoi la magazin', co_empty:'Coșul e gol.' },
+      m_save_err:'Eroare la salvare. Verifică Supabase.', m_net_err:'Eroare de rețea. Încearcă din nou.', no_products:'Încă nu sunt produse. Adaugă din panoul de admin.', pp_home:'Acasă', pp_add:'Adaugă în coș', pp_delivery:'Livrare:', pp_delivery_v:'Chișinău — gratuit peste 300 lei. În Moldova — 1–3 zile.', pp_returns:'Retur:', pp_returns_v:'14 zile pentru retur, dacă produsul e nefolosit.', pp_pack:'Împachetat:', pp_pack_v:'Fiecare comandă vine împachetată cadou.', pp_related:'Poate îți place', story1_eye:'Povestea noastră', story1_t:'Alese pe îndelete, ca să-ți placă mereu.', story1_p1:'Fiecare piesă din colecție e trecută prin mâinile noastre înainte să ajungă pe site. Încercăm închizătorile, verificăm culorile la lumina naturală, și ținem doar ce ne-am pune singure.', story1_p2:'Așa cataloagele noastre nu au sute de produse la nesfârșit, dar fiecare merită atenția ta.', story2_eye:'Împachetat cu grijă', story2_t:'Fiecare comandă, gata de dăruit.', story2_p1:'Nu contează dacă e pentru tine sau pentru cineva drag — fiecare piesă ajunge împachetată în hârtie fină, cu o panglică și un cartonaș pe care poate fi scris mesajul tău.', story2_p2:'Micile detalii contează. La noi, ele sunt incluse.', opt_courier:'Livrare prin curier', co_back:'← înapoi la magazin', co_cart:'Coșul de cumpărături', co_method:'Metoda de livrare', co_city:'Orașul livrării', co_city_ph:'Alege orașul', co_date:'Data', co_time:'Ora', time_op:'Stabiliți cu operatorul', co_msg:'Mesaj pe felicitare', co_msg_ph:'Câteva cuvinte care vor fi printate pe felicitare', co_subtotal:'Subtotal', co_promo:'Ai un cod promoțional?', co_total:'TOTAL', co_continue:'Continuă', co_contact:'Datele tale', l_adresa:'Adresă (stradă, nr.)', co_back_btn:'Înapoi', co_done_t:'Comandă trimisă!', co_done_p:'Îți mulțumim! Te contactăm în curând pentru confirmare.', co_back_shop:'Înapoi la magazin', co_empty:'Coșul e gol.' },
     ru:{ nav_shop:'Магазин', nav_why:'Почему Canapix', nav_gifts:'Подарки', nav_contact:'Контакты', account:'Аккаунт',
       hero_eyebrow:'Аксессуары и маленькие подарки', hero_title:'Мелочи, которые <em>меняют</em> весь день.',
       hero_p:'Серьги, заколки, браслеты и аккуратно упакованные подарки — выбраны с любовью, готовы дарить.',
@@ -495,7 +572,7 @@
       promise2_t:'Доставка по Кишинёву', promise2_d:'Заказал сегодня — завтра у тебя. По городу доставка бесплатна от 300 лей.',
       promise3_t:'Ограниченные партии', promise3_d:'Привозим маленькими партиями, поэтому редко встретишь кого-то с той же вещью.',
       foot_tagline:'Маленькие аксессуары и аккуратно упакованные подарки из Кишинёва.',
-      foot_shop:'Магазин', foot_help:'Помощь', foot_write:'Напишите нам', foot_delivery:'Доставка', foot_returns:'Возврат', foot_contact:'Контакты',
+      foot_shop:'Магазин', foot_help:'Помощь', foot_write:'Напишите нам', foot_about:'О нас', foot_blog:'Блог', foot_delivery:'Доставка', foot_returns:'Возврат', foot_faq:'FAQ', foot_contact:'Контакты',
       cart_title:'Твоя корзина', cart_empty:'Корзина пуста', cart_empty_sub:'Добавь аксессуары, и они появятся здесь.',
       cart_total:'Итого', cart_checkout:'Оформить заказ',
       form_title:'Оформление заказа', form_sub:'Заполни данные для доставки, чтобы мы отправили заказ.',
@@ -503,7 +580,7 @@
       tag_nou:'Новинка', tag_popular:'Хит', opt_delivery:'Доставка (оплата при получении)', opt_pickup:'Самовывоз', l_telefon:'Телефон', pickup_note:'Ждём тебя: Кишинёв, ул. Пример 1. Время подтвердим по телефону.', m_city:'Укажи город для доставки.',
       m_added:'добавлено в корзину 🌷', m_cart_empty:'Корзина пуста 🌸', m_fill:'Заполни имя, фамилию и почту.',
       m_keys:'Сначала добавь ключи Supabase в код.', m_sending:'Отправка...', m_created:'Заказ отправлен! Спасибо 🌷',
-      m_save_err:'Ошибка сохранения. Проверь Supabase.', m_net_err:'Ошибка сети. Попробуй снова.', no_products:'Товаров пока нет. Добавь их в админ-панели.', opt_courier:'Доставка курьером', co_back:'← назад в магазин', co_cart:'Корзина', co_method:'Способ получения', co_city:'Город доставки', co_city_ph:'Выберите город', co_date:'Дата', co_time:'Время', time_op:'Уточнить с оператором', co_msg:'Сообщение на открытке', co_msg_ph:'Пару слов, которые напечатаем на открытке', co_subtotal:'Подытог', co_promo:'Есть промокод?', co_total:'ИТОГО', co_continue:'Продолжить', co_contact:'Твои данные', l_adresa:'Адрес (улица, дом)', co_back_btn:'Назад', co_done_t:'Заказ отправлен!', co_done_p:'Спасибо! Мы скоро свяжемся для подтверждения.', co_back_shop:'Вернуться в магазин', co_empty:'Корзина пуста.' },
+      m_save_err:'Ошибка сохранения. Проверь Supabase.', m_net_err:'Ошибка сети. Попробуй снова.', no_products:'Товаров пока нет. Добавь их в админ-панели.', pp_home:'Главная', pp_add:'В корзину', pp_delivery:'Доставка:', pp_delivery_v:'Кишинёв — бесплатно от 300 лей. По Молдове — 1–3 дня.', pp_returns:'Возврат:', pp_returns_v:'14 дней на возврат, если товар не использовался.', pp_pack:'Упаковка:', pp_pack_v:'Каждый заказ приходит упакованным как подарок.', pp_related:'Возможно понравится', story1_eye:'Наша история', story1_t:'Выбрано с любовью — чтобы носилось долго.', story1_p1:'Каждая вещь из коллекции проходит через наши руки прежде, чем попасть на сайт. Пробуем застёжки, проверяем цвет при дневном свете, оставляем только то, что сами бы носили.', story1_p2:'Поэтому в каталоге не бесконечные сотни позиций — но каждая заслуживает внимания.', story2_eye:'Упаковано с заботой', story2_t:'Каждый заказ — готовый подарок.', story2_p1:'Не важно, себе или в подарок — каждая вещь приходит в тонкой бумаге, с лентой и открыткой, куда можно написать твоё сообщение.', story2_p2:'Мелочи имеют значение. У нас они включены.', opt_courier:'Доставка курьером', co_back:'← назад в магазин', co_cart:'Корзина', co_method:'Способ получения', co_city:'Город доставки', co_city_ph:'Выберите город', co_date:'Дата', co_time:'Время', time_op:'Уточнить с оператором', co_msg:'Сообщение на открытке', co_msg_ph:'Пару слов, которые напечатаем на открытке', co_subtotal:'Подытог', co_promo:'Есть промокод?', co_total:'ИТОГО', co_continue:'Продолжить', co_contact:'Твои данные', l_adresa:'Адрес (улица, дом)', co_back_btn:'Назад', co_done_t:'Заказ отправлен!', co_done_p:'Спасибо! Мы скоро свяжемся для подтверждения.', co_back_shop:'Вернуться в магазин', co_empty:'Корзина пуста.' },
     en:{ nav_shop:'Shop', nav_why:'Why Canapix', nav_gifts:'Gifts', nav_contact:'Contact', account:'Account',
       hero_eyebrow:'Accessories & little gifts', hero_title:'Small details that <em>change</em> the whole day.',
       hero_p:'Earrings, clips, bracelets and carefully wrapped gifts — hand-picked and ready to give.',
@@ -514,7 +591,7 @@
       promise2_t:'Delivery in Chișinău', promise2_d:'Order today, get it tomorrow. Free city delivery from 300 lei.',
       promise3_t:'Small-batch pieces', promise3_d:'We stock small quantities, so you will rarely see someone with the same piece.',
       foot_tagline:'Small accessories and carefully wrapped gifts, from Chișinău.',
-      foot_shop:'Shop', foot_help:'Help', foot_write:'Contact us', foot_delivery:'Delivery', foot_returns:'Returns', foot_contact:'Contact',
+      foot_shop:'Shop', foot_help:'Help', foot_write:'Contact us', foot_about:'About us', foot_blog:'Blog', foot_delivery:'Delivery', foot_returns:'Returns', foot_faq:'FAQ', foot_contact:'Contact',
       cart_title:'Your cart', cart_empty:'Your cart is empty', cart_empty_sub:'Add some accessories and they will show up here.',
       cart_total:'Total', cart_checkout:'Complete order',
       form_title:'Complete your order', form_sub:'Fill in your delivery details so we can send your order.',
@@ -522,7 +599,7 @@
       tag_nou:'New', tag_popular:'Popular', opt_delivery:'Delivery (pay on arrival)', opt_pickup:'Pickup', l_telefon:'Phone', pickup_note:'Come to: Chișinău, Exemplu St. 1. We will confirm the time by phone.', m_city:'Add your city for delivery.',
       m_added:'added to cart 🌷', m_cart_empty:'Cart is empty 🌸', m_fill:'Fill in first name, last name and email.',
       m_keys:'Add your Supabase keys in the code first.', m_sending:'Sending...', m_created:'Order placed! Thank you 🌷',
-      m_save_err:'Save error. Check Supabase.', m_net_err:'Network error. Try again.', no_products:'No products yet. Add them from the admin panel.', opt_courier:'Courier delivery', co_back:'← back to shop', co_cart:'Shopping cart', co_method:'Delivery method', co_city:'Delivery city', co_city_ph:'Choose the city', co_date:'Date', co_time:'Time', time_op:'Confirm with operator', co_msg:'Card message', co_msg_ph:'A few words to print on the card', co_subtotal:'Subtotal', co_promo:'Have a promo code?', co_total:'TOTAL', co_continue:'Continue', co_contact:'Your details', l_adresa:'Address (street, no.)', co_back_btn:'Back', co_done_t:'Order placed!', co_done_p:'Thank you! We will contact you soon to confirm.', co_back_shop:'Back to shop', co_empty:'Cart is empty.' }
+      m_save_err:'Save error. Check Supabase.', m_net_err:'Network error. Try again.', no_products:'No products yet. Add them from the admin panel.', pp_home:'Home', pp_add:'Add to cart', pp_delivery:'Delivery:', pp_delivery_v:'Chișinău — free over 300 lei. In Moldova — 1–3 days.', pp_returns:'Returns:', pp_returns_v:'14 days for returns if the item is unused.', pp_pack:'Packaging:', pp_pack_v:'Every order arrives gift-wrapped.', pp_related:'You might like', story1_eye:'Our story', story1_t:'Chosen with care, so you keep wearing them.', story1_p1:'Every piece in the collection passes through our own hands before it reaches the site. We try the clasps, check colors in daylight, and keep only what we would wear ourselves.', story1_p2:'That is why our catalog is not endless — but every piece earns its place.', story2_eye:'Wrapped with care', story2_t:'Every order is a ready gift.', story2_p1:'Whether it is for you or for someone dear — every piece comes in fine paper, with a ribbon and a small card for your personal message.', story2_p2:'Small details matter. At Canapix, they come included.', opt_courier:'Courier delivery', co_back:'← back to shop', co_cart:'Shopping cart', co_method:'Delivery method', co_city:'Delivery city', co_city_ph:'Choose the city', co_date:'Date', co_time:'Time', time_op:'Confirm with operator', co_msg:'Card message', co_msg_ph:'A few words to print on the card', co_subtotal:'Subtotal', co_promo:'Have a promo code?', co_total:'TOTAL', co_continue:'Continue', co_contact:'Your details', l_adresa:'Address (street, no.)', co_back_btn:'Back', co_done_t:'Order placed!', co_done_p:'Thank you! We will contact you soon to confirm.', co_back_shop:'Back to shop', co_empty:'Cart is empty.' }
   };
 
   /* ---------- SVG produse ---------- */
@@ -537,7 +614,7 @@
 
   /* ---------- produse ---------- */
   const SAMPLE = [
-    {id:'demo-cercei', names:{ro:'Cercei Rouă', ru:'Серьги «Роса»', en:'Dew earrings'}, desc:{ro:'Argint 925, lungime 3 cm.', ru:'Серебро 925, длина 3 см.', en:'925 silver, 3 cm long.'}, c:'bijuterii', price:180, tag:'nou', tint:'var(--blush)', art:earrings(), image_url:null},
+    {id:'demo-cercei', names:{ro:'Cercei Rouă', ru:'Серьги «Роса»', en:'Dew earrings'}, desc:{ro:'Argint 925, lungime 3 cm.', ru:'Серебро 925, длина 3 см.', en:'925 silver, 3 cm long.'}, c:'bijuterii', price:180, tag:'nou', tint:'var(--blush)', art:earrings(), image_url:null, images:null},
     {id:'demo-inel', names:{ro:'Inel delicat', ru:'Изящное кольцо', en:'Delicate ring'}, c:'bijuterii', price:150, tag:'', tint:'var(--sage)', art:ring(), image_url:null},
     {id:'demo-colier', names:{ro:'Colier fin', ru:'Тонкое колье', en:'Fine necklace'}, c:'bijuterii', price:220, tag:'', tint:'var(--lilac)', art:necklace(), image_url:null},
     {id:'demo-agrafa', names:{ro:'Agrafă floare', ru:'Заколка-цветок', en:'Flower hair clip'}, c:'par', price:90, tag:'popular', tint:'var(--butter)', art:clip(), image_url:null},
@@ -588,13 +665,13 @@
       const name = p.names[lang];
       const catLabel = T[lang]['cat_'+p.c] || p.c;
       const tagLabel = p.tag ? (T[lang]['tag_'+p.tag] || p.tag) : '';
-      return '<article class="card">'
+      return '<article class="card" onclick="openProduct(\''+p.id+'\')">'
         + '<div class="thumb" style="background:'+(p.tint||'var(--blush)')+'">'
         + (tagLabel ? '<span class="tag">'+tagLabel+'</span>' : '')
         + media(p) + '</div>'
         + '<div class="body"><h3>'+name+'</h3><span class="desc">'+catLabel+'</span>'+ (p.desc && p.desc[lang] ? '<p class="prod-desc">'+p.desc[lang]+'</p>' : '')
         + '<div class="row"><span class="price">'+p.price+' <small>lei</small></span>'
-        + '<button class="add" onclick="add(\''+p.id+'\')" aria-label="+">+</button></div></div></article>';
+        + '<button class="add" onclick="event.stopPropagation();add(\''+p.id+'\')" aria-label="+">+</button></div></div></article>';
     }).join('');
     $('shown').textContent = list.length + ' ' + T[lang].products_word;
   }
@@ -645,6 +722,114 @@
     t.textContent = msg; t.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
   }
+  /* ---------- Info pages ---------- */
+  const INFO_PAGES = {
+    about: {
+      ro: { title: 'Despre Canapix', eye: 'Povestea noastr\u0103', body:
+        '<p>Canapix a plecat dintr-o dorin\u0163\u0103 simpl\u0103: s\u0103 aducem accesorii mici, alese cu grij\u0103, la un pre\u0163 pe care nu trebuie s\u0103-l calculezi de dou\u0103 ori.</p>' +
+        '<p>Fiecare pies\u0103 e testat\u0103 de noi \u00eenainte s\u0103 ajung\u0103 la tine \u2014 \u00eencerc\u0103m fiecare \u00eenchiz\u0103toare, verific\u0103m fiecare culoare la lumina natural\u0103 \u015fi excludem tot ce nu ne-am pune singure. A\u015fa r\u0103m\u00e2n \u00een colec\u0163ie doar lucruri care merit\u0103.</p>' +
+        '<p>Sediul nostru e \u00een Chi\u015fin\u0103u. Livr\u0103m \u00een toat\u0103 Moldova, \u00eempachet\u0103m fiecare comand\u0103 ca pe un cadou \u015fi punem un mesaj personal dac\u0103 ne rogi.</p>'
+      },
+      ru: { title: 'О Canapix', eye: 'Наша история', body:
+        '<p>Canapix родился из простого желания: приносить маленькие тщательно отобранные аксессуары по цене, которую не приходится долго обдумывать.</p>' +
+        '<p>Каждую вещь мы пробуем сами перед тем, как выложить её на сайт — щёлкаем застёжки, проверяем цвет при дневном свете и убираем всё, что сами бы не носили. Так в коллекции остаётся только то, что действительно нравится.</p>' +
+        '<p>Мы находимся в Кишинёве. Доставляем по всей Молдове, каждую посылку упаковываем как подарок и добавляем открытку с личным сообщением, если попросишь.</p>'
+      },
+      en: { title: 'About Canapix', eye: 'Our story', body:
+        '<p>Canapix started from a simple wish: to bring small, carefully chosen accessories at a price you don\u2019t have to think about twice.</p>' +
+        '<p>Every piece is tested by us before it reaches you \u2014 we try every clasp, check every color in daylight, and drop anything we would not wear ourselves. Only the ones that pass make it to the shop.</p>' +
+        '<p>We are based in Chi\u0219in\u0103u. We ship all over Moldova, wrap every order like a gift, and add a personal note whenever you ask.</p>'
+      }
+    },
+    delivery: {
+      ro: { title: 'Livrare', eye: 'Cum ajunge la tine', body:
+        '<p><b>Chi\u015fin\u0103u \u2014 curier.</b> Comand\u0103 azi p\u00e2n\u0103 la 18:00 \u2014 livr\u0103m a doua zi. Livrare gratuit\u0103 la comenzi peste 300 lei.</p>' +
+        '<p><b>Restul \u0163\u0103rii.</b> Trimitem prin curier (Nova Post, DPD) sau Po\u015fta Moldovei. Termen 1\u20133 zile lucr\u0103toare.</p>' +
+        '<p><b>Ridicare personal\u0103.</b> Din centrul Chi\u015fin\u0103ului, dup\u0103 confirmarea comenzii. \u00cenainte de vizit\u0103, te sun\u0103m ca s\u0103 stabilim ora.</p>' +
+        '<p>Costurile exacte se calculeaz\u0103 la finalizarea comenzii, \u00een func\u0163ie de ora\u015f \u015fi metod\u0103.</p>'
+      },
+      ru: { title: 'Доставка', eye: 'Как заказ попадёт к тебе', body:
+        '<p><b>Кишинёв — курьер.</b> Заказ до 18:00 — доставка на следующий день. При заказе от 300 лей доставка по городу бесплатна.</p>' +
+        '<p><b>По Молдове.</b> Отправляем курьерскими службами (Nova Post, DPD) или Poșta Moldovei. Срок 1–3 рабочих дня.</p>' +
+        '<p><b>Самовывоз.</b> Из центра Кишинёва после подтверждения заказа. Перед визитом мы позвоним, чтобы согласовать время.</p>' +
+        '<p>Точная стоимость рассчитывается при оформлении заказа в зависимости от города и способа.</p>'
+      },
+      en: { title: 'Delivery', eye: 'How it reaches you', body:
+        '<p><b>Chi\u0219in\u0103u \u2014 courier.</b> Order today by 18:00 \u2014 delivered next day. Free delivery within the city for orders over 300 lei.</p>' +
+        '<p><b>Rest of the country.</b> Sent by courier (Nova Post, DPD) or Po\u0219ta Moldovei. Arrives in 1\u20133 business days.</p>' +
+        '<p><b>Pickup.</b> From central Chi\u0219in\u0103u after we confirm your order. We call you before the visit to agree on the time.</p>' +
+        '<p>The exact cost is calculated at checkout, depending on city and method.</p>'
+      }
+    },
+    returns: {
+      ro: { title: 'Retur', eye: 'Politica de retur', body:
+        '<p>Dac\u0103 ceva nu ar\u0103t\u0103 sau nu se poart\u0103 cum \u00ee\u0163i doreai, ai <b>14 zile</b> de la primire ca s\u0103 ne \u00eenapoiezi produsul.</p>' +
+        '<p>Condi\u0163ii simple: articolul s\u0103 fie nefolosit, cu ambalajul original \u015fi eticheta intact\u0103. Din motive de igien\u0103, nu accept\u0103m retur pentru cercei tip \u0163int\u0103.</p>' +
+        '<p>Cum func\u0163ioneaz\u0103: scrie-ne pe Instagram, Telegram sau la num\u0103rul de telefon, \u00ee\u0163i confirm\u0103m adresa de retur. Rambursul se face \u00een 3\u20135 zile lucr\u0103toare dup\u0103 ce primim coletul.</p>'
+      },
+      ru: { title: 'Возврат', eye: 'Правила возврата', body:
+        '<p>Если что-то не подошло или не выглядит так, как ты ожидал(а), у тебя есть <b>14 дней</b> с момента получения, чтобы вернуть товар.</p>' +
+        '<p>Условия простые: вещь не должна быть в использовании, в оригинальной упаковке и с бирками. По гигиеническим причинам мы не принимаем возврат серёг-гвоздиков.</p>' +
+        '<p>Как это работает: напиши нам в Instagram, Telegram или по телефону — мы подтвердим адрес возврата. Деньги вернутся в течение 3–5 рабочих дней после получения посылки.</p>'
+      },
+      en: { title: 'Returns', eye: 'Our return policy', body:
+        '<p>If something doesn\u2019t look or feel right, you have <b>14 days</b> from delivery to return it.</p>' +
+        '<p>Simple conditions: the item must be unused, in the original packaging and with tags on. For hygiene reasons, we cannot accept returns on stud earrings.</p>' +
+        '<p>How it works: message us on Instagram, Telegram, or call us. We\u2019ll confirm the return address, and refund you within 3\u20135 business days of receiving the parcel.</p>'
+      }
+    },
+    faq: {
+      ro: { title: '\u00centreb\u0103ri frecvente', eye: 'FAQ', body:
+        '<p><b>Cum comand?</b> Adaug\u0103 produsul \u00een co\u015f, apas\u0103 pe co\u015f, apoi \u201eFinalizeaz\u0103 comanda\u201d \u015fi urmeaz\u0103 pa\u015fii.</p>' +
+        '<p><b>Cum pl\u0103tesc?</b> Numerar la primire (livrare curier) sau la ridicare personal\u0103. Plata online prin card \u2014 \u00een cur\u00e2nd.</p>' +
+        '<p><b>Materialul \u00ee\u015fi p\u0103streaz\u0103 culoarea?</b> Da, dac\u0103 nu \u00eel por\u0163i \u00een du\u015f, la piscin\u0103 sau la fitness. \u00cenainte de folosire, evit\u0103 parfumul direct pe pies\u0103.</p>' +
+        '<p><b>Ave\u0163i cadouri gata \u00eempachetate?</b> Da, categoria \u201eCadouri gata\u201d. Adaug\u0103m gratuit un bilet cu mesajul t\u0103u.</p>' +
+        '<p><b>Se pot schimba m\u0103rimile?</b> \u00cenainte de trimitere \u2014 da, scrie-ne repede. Dup\u0103 livrare \u2014 doar prin retur.</p>'
+      },
+      ru: { title: 'Частые вопросы', eye: 'FAQ', body:
+        '<p><b>Как оформить заказ?</b> Добавь товар в корзину, нажми на корзину и «Оформить заказ» — просто пройди по шагам.</p>' +
+        '<p><b>Как оплатить?</b> Наличными при получении (курьер) или при самовывозе. Онлайн-оплата картой — скоро.</p>' +
+        '<p><b>Держится ли цвет?</b> Да, если не носить в душе, бассейне и на тренировках. Также избегай прямого контакта с духами.</p>' +
+        '<p><b>Есть готовые подарки?</b> Да, категория «Готовые подарки». Бесплатно добавляем открытку с твоим сообщением.</p>' +
+        '<p><b>Можно поменять размер?</b> До отправки — да, напиши нам скорее. После доставки — только через возврат.</p>'
+      },
+      en: { title: 'FAQ', eye: 'Frequently asked', body:
+        '<p><b>How do I order?</b> Add to cart, open the cart, click \u201cComplete order\u201d and follow the steps.</p>' +
+        '<p><b>How do I pay?</b> Cash on delivery (courier) or on pickup. Card payments online \u2014 coming soon.</p>' +
+        '<p><b>Does the color last?</b> Yes, if you don\u2019t wear it in the shower, pool, or gym. Also avoid spraying perfume directly on the piece.</p>' +
+        '<p><b>Do you have ready gifts?</b> Yes, the \u201cReady gifts\u201d category. We include a free note with your message.</p>' +
+        '<p><b>Can I change the size?</b> Before shipping \u2014 yes, message us fast. After delivery \u2014 only via return.</p>'
+      }
+    },
+    contact: {
+      ro: { title: 'Contact', eye: 'Suntem la un mesaj distan\u0163\u0103', body:
+        '<p>Scrie-ne oric\u00e2nd, r\u0103spundem \u00een aceea\u015fi zi \u00een intervalul 09:00\u201319:00.</p>' +
+        '<ul><li><b>Instagram:</b> @canapix.md</li><li><b>Telegram:</b> @canapix</li><li><b>Telefon:</b> +373 60 000 000</li><li><b>Email:</b> salut@canapix.md</li></ul>' +
+        '<p>Pentru comenzi de cadouri corporative sau colabor\u0103ri, scrie-ne pe email cu detaliile.</p>'
+      },
+      ru: { title: 'Контакты', eye: 'Мы на связи', body:
+        '<p>Пиши в любое время, отвечаем в тот же день с 09:00 до 19:00.</p>' +
+        '<ul><li><b>Instagram:</b> @canapix.md</li><li><b>Telegram:</b> @canapix</li><li><b>Телефон:</b> +373 60 000 000</li><li><b>Email:</b> salut@canapix.md</li></ul>' +
+        '<p>Для корпоративных подарков или сотрудничества — пиши на email с деталями.</p>'
+      },
+      en: { title: 'Contact', eye: 'We\u2019re a message away', body:
+        '<p>Message us any time, we reply the same day between 09:00 and 19:00.</p>' +
+        '<ul><li><b>Instagram:</b> @canapix.md</li><li><b>Telegram:</b> @canapix</li><li><b>Phone:</b> +373 60 000 000</li><li><b>Email:</b> salut@canapix.md</li></ul>' +
+        '<p>For corporate gifting or collaborations, please email us with the details.</p>'
+      }
+    }
+  };
+
+  function openInfo(key){
+    const page = INFO_PAGES[key] && INFO_PAGES[key][lang] ? INFO_PAGES[key][lang] : INFO_PAGES[key].ro;
+    $('infoEye').textContent = page.eye;
+    $('infoTitle').textContent = page.title;
+    $('infoBody').innerHTML = page.body;
+    $('infoOverlay').classList.add('open');
+  }
+  function closeInfo(){ $('infoOverlay').classList.remove('open'); }
+  document.getElementById('infoOverlay').addEventListener('click', e => { if(e.target.id==='infoOverlay') closeInfo(); });
+
 
   /* ---------- formular / Supabase ---------- */
   function setDelivery(m){
@@ -654,7 +839,7 @@
     if($('coAddr')) $('coAddr').style.display = courier ? 'block' : 'none';
     document.querySelectorAll('input[name=dm]').forEach(r => { r.checked = (r.value === m); });
   }
-  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeCart(); closeCheckout(); } });
+  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeCart(); closeCheckout(); closeInfo(); closeProduct(); } });
 
   /* ============================================================
      SUPABASE — înlocuiește cele 2 valori cu ale tale
@@ -749,6 +934,61 @@
   }
 
   /* ---------- init ---------- */
+  /* ---------- product page ---------- */
+  let prodCurrent = null;
+  function openProduct(id){
+    const p = prod(id); if(!p) return;
+    prodCurrent = p;
+    $('ppName').textContent = p.names[lang];
+    $('ppTitle').textContent = p.names[lang];
+    $('ppCat').textContent = T[lang]['cat_'+p.c] || p.c;
+    $('ppCatLink').textContent = T[lang]['cat_'+p.c] || p.c;
+    $('ppPrice').textContent = p.price + ' lei';
+    $('ppDesc').textContent = (p.desc && p.desc[lang]) || '';
+    const imgs = p.images && p.images.length ? p.images : (p.image_url ? [p.image_url] : []);
+    const hero = $('ppHero');
+    if(imgs.length){ hero.innerHTML = '<img src="'+imgs[0]+'" alt="">'; }
+    else { hero.innerHTML = p.art || ''; }
+    const th = $('ppThumbs');
+    if(imgs.length > 1){
+      th.innerHTML = imgs.map((u,i) => '<div class="pp-thumb '+(i===0?'active':'')+'" onclick="ppSetImg('+i+',this)"><img src="'+u+'"></div>').join('');
+      window._ppImgs = imgs;
+    } else { th.innerHTML = ''; }
+    const rel = PRODUCTS.filter(x => x.c === p.c && x.id !== p.id).slice(0,4);
+    if(rel.length){
+      $('ppRelated').style.display = 'block';
+      $('ppRelatedGrid').innerHTML = rel.map(x => {
+        const name = x.names[lang];
+        const catLabel = T[lang]['cat_'+x.c] || x.c;
+        return '<article class="card" onclick="openProduct(\''+x.id+'\')"><div class="thumb" style="background:'+(x.tint||'var(--blush)')+'">'
+          + media(x) + '</div><div class="body"><h3>'+name+'</h3><span class="desc">'+catLabel+'</span>'
+          + (x.desc && x.desc[lang] ? '<p class="prod-desc">'+x.desc[lang]+'</p>' : '')
+          + '<div class="row"><span class="price">'+x.price+' <small>lei</small></span>'
+          + '<button class="add" onclick="event.stopPropagation();add(\''+x.id+'\')">+</button></div></div></article>';
+      }).join('');
+    } else { $('ppRelated').style.display = 'none'; }
+    $('prodPage').classList.add('open'); window.scrollTo(0,0);
+  }
+  function ppSetImg(i, el){
+    if(!window._ppImgs) return;
+    $('ppHero').innerHTML = '<img src="'+window._ppImgs[i]+'" alt="">';
+    document.querySelectorAll('.pp-thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function closeProduct(){ $('prodPage').classList.remove('open'); prodCurrent = null; }
+  function ppAdd(){ if(prodCurrent){ add(prodCurrent.id); } }
+  function filterByCat(cat){
+    if(!cat) return;
+    const chip = Array.from(document.querySelectorAll('.chip')).find(c => c.getAttribute('data-i18n')==='cat_'+cat);
+    if(chip){ document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); render(cat); }
+    setTimeout(()=>document.getElementById('shop').scrollIntoView({behavior:'smooth'}), 100);
+  }
+
+  window.addEventListener('scroll', () => {
+    const b = document.getElementById('backTop');
+    if(b){ if(window.scrollY > 500) b.classList.add('show'); else b.classList.remove('show'); }
+  });
+
   async function loadProducts(){
     if(SUPABASE_URL.includes('XXXX')){ render(); return; }   // fără chei -> produse demo
     try{
@@ -762,7 +1002,7 @@
           names:{ ro:x.nume_ro||'', ru:x.nume_ru||x.nume_ro||'', en:x.nume_en||x.nume_ro||'' },
           desc:{ ro:x.desc_ro||'', ru:x.desc_ru||x.desc_ro||'', en:x.desc_en||x.desc_ro||'' },
           c:x.categorie||'bijuterii', price:x.pret||0, tag:x.tag||'',
-          image_url:x.image_url||null, art:null, tint:'var(--blush)'
+          image_url:x.image_url||null, images:x.images||null, art:null, tint:'var(--blush)'
         }));
       }
     }catch(e){ console.error('produse:', e); }
